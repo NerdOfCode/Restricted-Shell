@@ -2,7 +2,7 @@
 
 Author: NerdOfCode
 Purpose: A work in progress shell built in C... Designed to be lightweight and fast...
-Updated: 3/8/18
+Updated: 3/10/18
 
 */
 
@@ -31,7 +31,7 @@ int main ( void ){
 
 	while(1){
 		printf(YELLOW_TEXT "Command: " RESET, " " );
-		scanf("%s",input);
+		fgets(input,64,stdin);
 
 		//TODO 
 		// - logging
@@ -40,10 +40,11 @@ int main ( void ){
 		input[0] = tolower(input[0]);
 
 		//Check to see if user wants to exit before re-running loop
-		if(strcmp(input,"exit") == 0){
+		//Have to check for newline too, because of fgets for input
+		if(strcmp(input,"exit\n") == 0){
 			clean_up();
 			exit(1);
-		}else if(strcmp(input,"help") == 0){
+		}else if(strcmp(input,"help\n") == 0){
 			help_commands();
 		}else{
 			//Actually parse the command here
@@ -87,8 +88,9 @@ int parseCommand(char input[64]){
 	strcat(filename,".c");
 
 	if(access(filename, F_OK) == 0){
-		int command_status = system("gcc %s",filename);
+		//int command_status = system("gcc %s",filename);
 	}else{
+		printf("Command not found: %s\n",input);
 	}
 
 	return 0;
