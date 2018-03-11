@@ -1,8 +1,17 @@
 /*
 
+#######################################################################################
 Author: NerdOfCode
 Purpose: A work in progress shell built in C... Designed to be lightweight and fast...
-Updated: 3/10/18
+Tested on: Antergos(Linux)
+License: Apache-2.0
+Updated on: 3/10/18
+#######################################################################################
+
+#########################################################
+Documentation: Can be found on the github repository at:
+https://github.com/NerdOfCode/Restricted-Shell
+#########################################################
 
 */
 
