@@ -19,6 +19,9 @@ Updated: 3/10/18
 //Use 43m for background shading
 #define RESET "\x1B[0m"
 
+//Default path to command Bin
+#define CMD_BIN "./../Bin/"
+
 //Function Prototypes
 void clean_up();
 void help_commands();
@@ -26,6 +29,7 @@ void help_commands();
 int parseCommand();
 
 int main ( void ){
+
 
 	char input[64];
 
@@ -78,20 +82,25 @@ void help_commands(){
 
 int parseCommand(char input[64]){
 
-	int command_status = 0;
 	char filename[66];
 
 	//Check if command exists relative to its filename
 
-	//Add file extension
+	strcat(filename,CMD_BIN);
 	strcat(filename,input);
-	strcat(filename,".c");
 
+	//Remove newline character
+	filename[strlen(filename)-1] = 0;
+
+	//If command or rather file is found, proceed
 	if(access(filename, F_OK) == 0){
-		//int command_status = system("gcc %s",filename);
+		system(filename);
 	}else{
 		printf("Command not found: %s\n",input);
 	}
+
+	//Reset variables
+	memset(filename, 0, sizeof(filename));
 
 	return 0;
 }
