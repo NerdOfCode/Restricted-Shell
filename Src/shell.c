@@ -53,7 +53,10 @@ int main ( int argc, char *argv[] ){
 		// - logging
 
 		//Convert input to lowercase for unitext
-		input[0] = tolower(input[0]);
+		for(int i = 0; i <= strlen(input); i++){
+			input[i] = tolower(input[i]);
+
+		}
 
 		//Check to see if user wants to exit before re-running loop
 		//Have to check for newline too, because of fgets for input
@@ -64,6 +67,8 @@ int main ( int argc, char *argv[] ){
 			help_commands();
 		}else if(strcmp(input,"cmds\n") == 0){
 			commands();
+		}else if(strcmp(input," \n") == 0){
+			printf("He - He\n");
 		}else{
 			//Actually parse the command here
 			parseCommand(input);
@@ -106,6 +111,13 @@ int parseCommand(char input[64]){
 
 	char filename[66];
 	char command[32];
+
+	//Just in case, check for an empty command
+	if(input[0] == '\n'){
+		printf("Command not recognized...\n");
+		return 0;
+	}
+
 
 	//Remove all arguments
 	for(int i = 0; i <= strlen(input); i++){
