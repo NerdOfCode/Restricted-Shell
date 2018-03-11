@@ -42,7 +42,7 @@ int parseCommand();
 int main ( int argc, char *argv[] ){
 
 
-	char input[64];
+	char input[64] = "";
 
 
 	while(1){
@@ -105,17 +105,28 @@ void commands(){
 int parseCommand(char input[64]){
 
 	char filename[66];
+	char command[32];
 
-	//Ensure the user is in the correct directory
-	chroot("cd /home/nerdofcode/Desktop/Restricted-Shell/Src/");
+	//Remove all arguments
+	for(int i = 0; i <= strlen(input); i++){
+		if(input[i] != ' '){
+			command[i] = input[i];
+		}else{
+			command[i+1] = '\0';
+			break;
+		}
+
+	}
+
 
 	//Check if command exists relative to its filename
 
 	strcat(filename,CMD_BIN);
-	strcat(filename,input);
+	strcat(filename,command);
+
 
 	//Remove newline character
-	filename[strlen(filename)-1] = 0;
+	filename[strlen(filename)-1] = '\0';
 
 	//If command or rather file is found, proceed
 	if(access(filename, F_OK) == 0){
@@ -126,7 +137,11 @@ int parseCommand(char input[64]){
 
 	//Reset variables
 	memset(filename, 0, sizeof(filename));
+	memset(command, 0, sizeof(command));
+	memset(input, 0, 64);
 
 	return 0;
 }
+
+
 
