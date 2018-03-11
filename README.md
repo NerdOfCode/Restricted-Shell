@@ -4,6 +4,21 @@ A quick and simple shell in C that is designed to be fast and efficient... This 
 # Documentation
 To easily setup this amazing restricted shell... Follow the below commands:
 
-Assuming you are already in the directory `Restricted-shell/` simply run `make` and let the Makefile take care of the rest...
+First, you need to download the repository! You can accomplish such by running: 
 
-The only thing you have left to do is run `./Src/shell`!!!
+```shell
+git clone git@github.com:NerdOfCode/Restricted-Shell.git
+```
+
+Next, you can began the automated setup by running
+
+```shell
+cd Restricted-Shell/ && make
+```
+And finally, you can access the actual shell by running
+
+```shell
+./Src/shell
+```
+
+Enjoy!!! Oh, and also if anyone is to come across any errors or suggestions, please feel free to send an email to admin@nerdofcode.com!
