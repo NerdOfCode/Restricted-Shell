@@ -109,7 +109,8 @@ void commands(){
 
 int parseCommand(char input[64]){
 
-	char filename[66];
+	char *filename_ptr;
+	filename_ptr = malloc(64 * sizeof(char));
 	char command[32];
 
 	//Just in case, check for an empty command
@@ -142,34 +143,34 @@ int parseCommand(char input[64]){
 
 	//Check if command exists relative to its filename
 
-	strcat(filename,CMD_BIN);
-	strcat(filename,command);
+	strcat(filename_ptr,CMD_BIN);
+	strcat(filename_ptr,command);
 
 	//Remove newline character
-	filename[strlen(filename)-1] = '\0';
+	filename_ptr[strlen(filename_ptr)-1] = '\0';
 
 	//If command or rather file is found, proceed
-	if(access(filename, F_OK) == 0){
+	if(access(filename_ptr, F_OK) == 0){
 
 		//Since the command exists we can try running the arguments the user has provided
 		if(input != command){
-			memset(filename, 0, sizeof(filename));
-			strcat(filename, CMD_BIN);
-			strcat(filename, input);
+			memset(filename_ptr, 0, 64);
+			strcat(filename_ptr, CMD_BIN);
+			strcat(filename_ptr, input);
 			//Remove the newline
-			filename[strlen(filename)-1] = '\0';
+			filename_ptr[strlen(filename_ptr)-1] = '\0';
 
-			system(filename);
+			system(filename_ptr);
 
 		}else{
-			system(filename);
+			system(filename_ptr);
 		}
 	}else{
 		printf("Command not found: %s\n",input);
 	}
 
 	//Reset variables
-	memset(filename, 0, sizeof(filename));
+	memset(filename_ptr, 0, 64);
 	memset(command, 0, sizeof(command));
 	memset(input, 0, 64);
 
