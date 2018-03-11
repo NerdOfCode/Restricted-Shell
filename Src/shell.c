@@ -49,7 +49,7 @@ int main ( int argc, char *argv[] ){
 		printf(YELLOW_TEXT "Command: " RESET, " " );
 		fgets(input,64,stdin);
 
-		//TODO 
+		//TODO
 		// - logging
 
 		//Convert input to lowercase for unitext
@@ -87,7 +87,7 @@ void clean_up(){
 	printf("Cleaning up...\n");
 	//Reset color values
 	printf("%s\n",RESET);
-	//TODO 
+	//TODO
 	// - close any files used for logging
 
 
@@ -116,6 +116,15 @@ int parseCommand(char input[64]){
 	if(input[0] == '\n'){
 		printf("Command not recognized...\n");
 		return 0;
+	}
+
+	//Prevent user from escaping by running something like: 'ls && exec /bin/bash'
+
+	for(int i = 0; i <= strlen(input); i++){
+		if(input[i] == '&'){
+				fprintf(stderr,"Illegal character detected...\n");
+				return 0;
+		}
 	}
 
 
@@ -166,6 +175,3 @@ int parseCommand(char input[64]){
 
 	return 0;
 }
-
-
-
