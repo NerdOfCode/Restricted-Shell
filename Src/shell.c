@@ -22,6 +22,7 @@ https://github.com/NerdOfCode/Restricted-Shell
 #include <unistd.h> //Access
 #include <string.h>
 
+
 //Color Constants
 #define RED_TEXT "\033[1;31m"
 #define YELLOW_TEXT "\x1B[33m"
@@ -34,13 +35,15 @@ https://github.com/NerdOfCode/Restricted-Shell
 //Function Prototypes
 void clean_up();
 void help_commands();
+void commands();
 
 int parseCommand();
 
-int main ( void ){
+int main ( int argc, char *argv[] ){
 
 
 	char input[64];
+
 
 	while(1){
 		printf(YELLOW_TEXT "Command: " RESET, " " );
@@ -59,6 +62,8 @@ int main ( void ){
 			exit(1);
 		}else if(strcmp(input,"help\n") == 0){
 			help_commands();
+		}else if(strcmp(input,"cmds\n") == 0){
+			commands();
 		}else{
 			//Actually parse the command here
 			parseCommand(input);
@@ -84,14 +89,25 @@ void clean_up(){
 }
 
 void help_commands(){
-	printf("Current usage:\n");
-	printf("exit --> Exits this shell...\n");
+	printf("Welcome to NerdOfCode's Restricted-Shell!!!\n");
+	printf("For a complete list of commands, please run 'cmds'\n");
 }
 
+void commands(){
+   	printf("Current usage:\n");
+        printf("exit --> Exits this shell...\n");
+        printf("pwd --> Prints the working directory\n");
+        printf("clear --> Clears the screen");
+        puts("");
+
+}
 
 int parseCommand(char input[64]){
 
 	char filename[66];
+
+	//Ensure the user is in the correct directory
+	chroot("cd /home/nerdofcode/Desktop/Restricted-Shell/Src/");
 
 	//Check if command exists relative to its filename
 
@@ -113,3 +129,4 @@ int parseCommand(char input[64]){
 
 	return 0;
 }
+
