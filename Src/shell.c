@@ -124,13 +124,25 @@ int parseCommand(char input[64]){
 	strcat(filename,CMD_BIN);
 	strcat(filename,command);
 
-
 	//Remove newline character
 	filename[strlen(filename)-1] = '\0';
 
 	//If command or rather file is found, proceed
 	if(access(filename, F_OK) == 0){
-		system(filename);
+
+		//Since the command exists we can try running the arguments the user has provided
+		if(input != command){
+			memset(filename, 0, sizeof(filename));
+			strcat(filename, CMD_BIN);
+			strcat(filename, input);
+			//Remove the newline
+			filename[strlen(filename)-1] = '\0';
+
+			system(filename);
+
+		}else{
+			system(filename);
+		}
 	}else{
 		printf("Command not found: %s\n",input);
 	}
