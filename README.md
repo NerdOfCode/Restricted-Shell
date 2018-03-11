@@ -13,12 +13,9 @@ git clone git@github.com:NerdOfCode/Restricted-Shell.git
 Next, you can began the automated setup by running
 
 ```shell
-cd Restricted-Shell/ && make
+cd Restricted-Shell && ./run.sh
 ```
-And finally, you can access the actual shell by running
+And Congratulations on setting up this Restricted-Shell!
 
-```shell
-./Src/shell
-```
 
 Enjoy!!! Oh, and also if anyone is to come across any errors or suggestions, please feel free to send an email to admin@nerdofcode.com!
