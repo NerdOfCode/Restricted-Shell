@@ -4,13 +4,13 @@
 #Purpose: Easily setup this Restricted-Shell
 
 #Change to 0 to turn auto updates off
-updates=1
+updates=0
 
 config=".config"
 
 echo "Updating repository..."
 
-if [[ updates ]]
+if [[ "$updates" == "1" ]]
 then
 	git pull origin master
 fi

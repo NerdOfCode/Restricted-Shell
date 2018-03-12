@@ -32,6 +32,12 @@ https://github.com/NerdOfCode/Restricted-Shell
 //Default path to command Bin
 #define CMD_BIN "./../Bin/"
 
+//make our own version of 'bool'
+typedef int bool;
+
+#define TRUE 1
+#define FALSE 0
+
 //Function Prototypes
 void clean_up();
 void help_commands();
@@ -110,8 +116,19 @@ void commands(){
 int parseCommand(char input[64]){
 
 	char *filename_ptr;
+	char *command_ptr;
+	bool command_args = FALSE;
+	//The command_ptr is for the user input but without any arguments attached
+
+	//Dynamic memory  allocation
 	filename_ptr = malloc(64 * sizeof(char));
-	char command[32];
+	command_ptr = malloc(64 * sizeof(char));
+
+	//Check for any allocation errors before saving input
+	if(filename_ptr == NULL || command_ptr == NULL){
+		fprintf(stderr, RED_TEXT"Failed to fork... Not enough memory...\n"RESET);
+		return 0;
+	}
 
 	//Just in case, check for an empty command
 	if(input[0] == '\n'){
@@ -120,9 +137,10 @@ int parseCommand(char input[64]){
 	}
 
 	//Prevent user from escaping by running something like: 'ls && exec /bin/bash'
+	//or 'ls -fdsafajfsdfl || exec /bin/bash'
 
 	for(int i = 0; i <= strlen(input); i++){
-		if(input[i] == '&'){
+		if(input[i] == '&' || input[i] == '|'){
 				fprintf(stderr,"Illegal character detected...\n");
 				return 0;
 		}
@@ -130,11 +148,12 @@ int parseCommand(char input[64]){
 
 
 	//Remove all arguments
-	for(int i = 0; i <= strlen(input); i++){
+	for(int i = 0; i <= strlen(input); ++i){
 		if(input[i] != ' '){
-			command[i] = input[i];
+			command_ptr[i] = input[i];
+			command_args = TRUE;
 		}else{
-			command[i+1] = '\0';
+			command_args = FALSE;
 			break;
 		}
 
@@ -144,34 +163,41 @@ int parseCommand(char input[64]){
 	//Check if command exists relative to its filename
 
 	strcat(filename_ptr,CMD_BIN);
-	strcat(filename_ptr,command);
+	strcat(filename_ptr,command_ptr);
 
-	//Remove newline character
-	filename_ptr[strlen(filename_ptr)-1] = '\0';
+
+	//Only remove newline if command has arguments
+	if(command_args){
+			filename_ptr[strlen(filename_ptr)-1] = '\0';
+	}
+
+	command_ptr[strlen(command_ptr)-1] = '\0';
+	input[strlen(input)-1] = '\0';
 
 	//If command or rather file is found, proceed
+
 	if(access(filename_ptr, F_OK) == 0){
 
 		//Since the command exists we can try running the arguments the user has provided
-		if(input != command){
+
+		if(input != command_ptr){
+			//Reset to default users args
 			memset(filename_ptr, 0, 64);
 			strcat(filename_ptr, CMD_BIN);
 			strcat(filename_ptr, input);
-			//Remove the newline
-			filename_ptr[strlen(filename_ptr)-1] = '\0';
-
 			system(filename_ptr);
 
 		}else{
 			system(filename_ptr);
 		}
 	}else{
-		printf("Command not found: %s\n",input);
+		puts("Command not found...");
 	}
 
 	//Reset variables
-	memset(filename_ptr, 0, 64);
-	memset(command, 0, sizeof(command));
+	command_args = FALSE;
+	memset(filename_ptr, 0, sizeof(filename_ptr));
+	memset(command_ptr, 0, sizeof(command_ptr));
 	memset(input, 0, 64);
 
 	return 0;
