@@ -45,15 +45,44 @@ void commands();
 
 int parseCommand();
 
+//Global variables
+
+
 int main ( int argc, char *argv[] ){
 
-
+	bool pwd_allowed = FALSE;
 	char input[64] = "";
 
 
+	//Test if user is allowed to user pwd and if allowed show the working directory
+	char *pwd_test;
+	int return_test_value;
+
+	pwd_test = malloc(64 * sizeof(char));
+	strcat(pwd_test,CMD_BIN);
+	strcat(pwd_test,"pwd");
+
+	if(access(pwd_test,F_OK) == 0){
+			//EXITSTATUS(system(CMD_BIN"pwd"));
+			return_test_value = system(CMD_BIN"pwd -none");
+			if(WEXITSTATUS(return_test_value) == 0){
+					pwd_allowed = TRUE;
+			}
+	}
+	//Release the memory
+
 	while(1){
-		printf(YELLOW_TEXT "Command: " RESET, " " );
-		fgets(input,64,stdin);
+		if(pwd_allowed == TRUE){
+				char pwd_buffer[1024];
+				getcwd(pwd_buffer, sizeof(pwd_buffer));
+				printf(YELLOW_TEXT "Command[%s]: " RESET, pwd_buffer);
+				fgets(input,64,stdin);
+		}else{
+				printf(YELLOW_TEXT "Command: " RESET, " " );
+				fgets(input,64,stdin);
+		}
+
+		memset(pwd_test,0,sizeof(pwd_test));
 
 		//TODO
 		// - logging
@@ -80,8 +109,6 @@ int main ( int argc, char *argv[] ){
 			parseCommand(input);
 		}
 	}
-
-
 	//Start the clean up b4 exit
 	clean_up();
 
@@ -118,6 +145,7 @@ int parseCommand(char input[64]){
 	char *filename_ptr;
 	char *command_ptr;
 	bool command_args = FALSE;
+	int command_status = 0;
 	//The command_ptr is for the user input but without any arguments attached
 
 	//Dynamic memory  allocation
@@ -174,10 +202,11 @@ int parseCommand(char input[64]){
 	command_ptr[strlen(command_ptr)-1] = '\0';
 	input[strlen(input)-1] = '\0';
 
+
+
 	//If command or rather file is found, proceed
 
 	if(access(filename_ptr, F_OK) == 0){
-
 		//Since the command exists we can try running the arguments the user has provided
 
 		if(input != command_ptr){

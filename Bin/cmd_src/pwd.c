@@ -2,7 +2,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int main( void ){
+int main( int argc ){
+
+        //If argc is greater or equal than 2 do not output pwd
+
+        if(argc >= 2){
+          return 0;
+        }
 
         char buffer[64];
 
@@ -10,5 +16,5 @@ int main( void ){
 
         printf("%s\n",buffer);
 
-	return 0;
+	      return 0;
 }

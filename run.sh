@@ -43,7 +43,7 @@ then
 		echo "*/" >> Bin/cmd_src/pwd.c
 		echo "#include <stdio.h>" >> Bin/cmd_src/pwd.c
 		echo "int main(void){" >> Bin/cmd_src/pwd.c
-		echo "printf(\"Command disallowed by admin...\n\");}" >> Bin/cmd_src/pwd.c
+		echo "printf(\"Command disallowed by admin...\n\");return -1;}" >> Bin/cmd_src/pwd.c
 
 	fi
 
@@ -57,4 +57,3 @@ cd Src/
 clear
 
 ./shell
-
