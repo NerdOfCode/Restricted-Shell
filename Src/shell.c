@@ -43,16 +43,19 @@ void clean_up();
 void help_commands();
 void commands();
 
+char *remove_char_until();
 int parseCommand();
 
 //Global variables
 
+//Basically the result of shorteneded
+char remove_char_result[128];
 
 int main ( int argc, char *argv[] ){
 
 	bool pwd_allowed = FALSE;
 	char input[64] = "";
-
+	char *string_compare = "";
 
 	//Test if user is allowed to user pwd and if allowed show the working directory
 	char *pwd_test;
@@ -69,13 +72,15 @@ int main ( int argc, char *argv[] ){
 					pwd_allowed = TRUE;
 			}
 	}
-	//Release the memory
 
 	while(1){
 		if(pwd_allowed == TRUE){
-				char pwd_buffer[1024];
+				char pwd_buffer[128];
+				char *short_pwd;
 				getcwd(pwd_buffer, sizeof(pwd_buffer));
-				printf(YELLOW_TEXT "Command[%s]: " RESET, pwd_buffer);
+				//Remove all characters up to last one...
+				short_pwd = remove_char_until(pwd_buffer, "/");
+				printf(YELLOW_TEXT "Command[%s]: " RESET, short_pwd);
 				fgets(input,64,stdin);
 		}else{
 				printf(YELLOW_TEXT "Command: " RESET, " " );
@@ -138,6 +143,28 @@ void commands(){
         printf("clear --> Clears the screen");
         puts("");
 
+}
+
+//Basically provide string and char and this will remove everything up to the last occurence of remove_char
+char *remove_char_until(char specified_buffer[128],char remove_char[2]){
+	//Begin removal process below
+
+	int highest = 0,i = 0;
+
+	for(i = 0; i <= strlen(specified_buffer);++i){
+			if(specified_buffer[i] == '/'){
+					//Will re-write until the last number which will hopefully be the highest :))))
+					highest = i;
+			}
+	}
+	i=0;
+	while(highest != strlen(specified_buffer)){
+			highest++;
+		  remove_char_result[i] = specified_buffer[highest];
+			i++;
+	}
+
+	return remove_char_result;
 }
 
 int parseCommand(char input[64]){
