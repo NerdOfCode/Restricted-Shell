@@ -45,13 +45,14 @@ void commands();
 
 char *remove_char_until();
 int parseCommand();
+int check_empty_beginning();
 
 //Global variables
 
 //Basically the result of shorteneded
 char remove_char_result[128];
 
-int main ( int argc, char *argv[] ){
+int main ( int argc, char argv[64] ){
 
 	bool pwd_allowed = FALSE;
 	char input[64] = "";
@@ -92,24 +93,27 @@ int main ( int argc, char *argv[] ){
 		//TODO
 		// - logging
 
+		//Not a good idea for case specific things, will need to make its own function for better use
 		//Convert input to lowercase for unitext
-		for(int i = 0; i <= strlen(input); i++){
-			input[i] = tolower(input[i]);
-
-		}
+		//for(int i = 0; i <= strlen(input); i++){
+			//input[i] = tolower(input[i]);
+		//}
 
 		//Check to see if user wants to exit before re-running loop
 		//Have to check for newline too, because of fgets for input
-		if(strcmp(input,"exit\n") == 0){
+		if(strncmp(input,"exit\n",sizeof(input)) == 0){
 			clean_up();
 			exit(1);
-		}else if(strcmp(input,"help\n") == 0){
+		}else if(strncmp(input,"help\n",sizeof(input)) == 0){
 			help_commands();
-		}else if(strcmp(input,"cmds\n") == 0){
+		}else if(strncmp(input,"cmds\n",sizeof(input)) == 0){
 			commands();
-		}else if(strcmp(input," \n") == 0){
+		}else if(strncmp(input," \n",sizeof(input)) == 0){
 			printf("He - He\n");
 		}else{
+			if(check_empty_beginning(input) <= -1){
+				main(0,"e");
+			}
 			//Actually parse the command here
 			parseCommand(input);
 		}
@@ -167,6 +171,23 @@ char *remove_char_until(char specified_buffer[128],char remove_char[2]){
 	return remove_char_result;
 }
 
+int check_empty_beginning(char input[64]){
+	//0 --> No space at beggining
+	//-1 --> A single space at index 0
+	//-2 --> Two spaces at beggining
+
+	//We'll hold off if it is only one space...
+	if(input[0] == ' '){
+		if(input[1] == ' '){
+				puts("Command not found...");
+				return -2;
+		}
+	}else{
+		return 0;
+	}
+	return -1;
+}
+
 int parseCommand(char input[64]){
 
 	char *filename_ptr;
@@ -187,7 +208,6 @@ int parseCommand(char input[64]){
 
 	//Just in case, check for an empty command
 	if(input[0] == '\n'){
-		printf("Command not recognized...\n");
 		return 0;
 	}
 
@@ -232,17 +252,16 @@ int parseCommand(char input[64]){
 
 
 	//If command or rather file is found, proceed
-
 	if(access(filename_ptr, F_OK) == 0){
 		//Since the command exists we can try running the arguments the user has provided
-
+		//Check if args and no args are different
 		if(input != command_ptr){
+
 			//Reset to default users args
 			memset(filename_ptr, 0, 64);
 			strcat(filename_ptr, CMD_BIN);
 			strcat(filename_ptr, input);
 			system(filename_ptr);
-
 		}else{
 			system(filename_ptr);
 		}

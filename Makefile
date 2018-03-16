@@ -9,8 +9,9 @@ commands:
 	if [ -a Bin/test ]; then rm Bin/test; fi
 	if [ -a Bin/clear ]; then rm Bin/clear; fi
 	if [ -a Bin/pwd ]; then rm Bin/pwd; fi
-
+	if [ -a Bin/cd ]; then rm Bin/cd; fi
 
 	gcc -o Bin/test Bin/cmd_src/test.c
 	gcc -o Bin/clear Bin/cmd_src/clear.c
 	gcc -o Bin/pwd Bin/cmd_src/pwd.c
+	gcc -o Bin/cd Bin/cmd_src/cd.c
