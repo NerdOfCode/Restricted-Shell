@@ -9,6 +9,12 @@ Updated on: 3/10/18
 #######################################################################################
 
 #########################################################
+!!WARNING WARNING WARNING WARNING WARNING WARNING!!
+=======================================================
+DOES NOT WORK ON CURRENTLY UBUNTU 16.04
+#########################################################
+
+#########################################################
 Documentation: Can be found on the github repository at:
 https://github.com/NerdOfCode/Restricted-Shell
 #########################################################
@@ -21,13 +27,7 @@ https://github.com/NerdOfCode/Restricted-Shell
 #include <ctype.h>
 #include <unistd.h> //Access
 #include <string.h>
-
-
-//Color Constants
-#define RED_TEXT "\033[1;31m"
-#define YELLOW_TEXT "\x1B[33m"
-//Use 43m for background shading
-#define RESET "\x1B[0m"
+#include "globals.h"
 
 //Default path to command Bin
 #define CMD_BIN "./../Bin/"
@@ -47,7 +47,6 @@ char *remove_char_until();
 int parseCommand();
 int check_empty_beginning();
 
-//Global variables
 
 //Basically the result of shorteneded
 char remove_char_result[128];
@@ -82,6 +81,7 @@ int main ( int argc, char argv[64] ){
 				//Remove all characters up to last one...
 				short_pwd = remove_char_until(pwd_buffer, "/");
 				printf(YELLOW_TEXT "Command[%s]: " RESET, short_pwd);
+				printf("CD BUFFER: %s\n",cd_buffer);
 				fgets(input,64,stdin);
 		}else{
 				printf(YELLOW_TEXT "Command: " RESET, " " );
@@ -185,7 +185,6 @@ int check_empty_beginning(char input[64]){
 	}else{
 		return 0;
 	}
-	return -1;
 }
 
 int parseCommand(char input[64]){
@@ -263,7 +262,8 @@ int parseCommand(char input[64]){
 			strcat(filename_ptr, input);
 			system(filename_ptr);
 		}else{
-			system(filename_ptr);
+				system(filename_ptr);
+
 		}
 	}else{
 		puts("Command not found...");

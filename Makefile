@@ -4,7 +4,6 @@ shell:
 	if [ -a Src/shell ]; then rm Src/shell; fi
 	gcc -o Src/shell Src/shell.c
 
-
 commands:
 	if [ -a Bin/test ]; then rm Bin/test; fi
 	if [ -a Bin/clear ]; then rm Bin/clear; fi
