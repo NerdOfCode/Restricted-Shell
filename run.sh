@@ -15,7 +15,21 @@ then
 	git pull origin master
 fi
 
+#Create function
+disallowed_bash(){
+	echo "$(sed 's/^/#/' Bin/ls)" > $1
+	echo "echo \"Command is disallowed by admin...\"" >> $1
+}
 
+disallowed_c(){
+	contents="$(cat $1)"
+	echo "/*" > $2
+	echo "$contents" >> $1
+	echo "*/" >> $1
+	echo "#include <stdio.h>" >> $1
+	echo "int main(void){" >> $1
+	echo "printf(\"Command disallowed by admin...\n\");return -1;}" >> $1
+}
 if [[ ! -f $config ]]
 then
 
@@ -26,24 +40,17 @@ then
 	echo "The 'ls' command basically lists files and folders in a directory"
 	read -p  "Would you like to allow the 'ls' command(y/n): " option1
 
-	if [[ "$option1" == "n" ]]
+	if [[ "$option1" != "y" ]]
 	then
-		echo "$(sed 's/^/#/' Bin/ls)" > Bin/ls
-		echo "echo \"Command is disallowed by admin...\"" >> Bin/ls
+		disallowed_bash Bin/ls
 	fi
 
 	echo -e "\nThe 'pwd' command 'prints working directory'..."
 	read -p "Would you like to allow the 'pwd' command(y/n): " option1
 
-	if [[ "$option1" == "n" ]]
+	if [[ "$option1" != "y" ]]
 	then
-		contents="$(cat Bin/cmd_src/pwd.c)"
-		echo "/*" > Bin/cmd_src/pwd.c
-		echo "$contents" >> Bin/cmd_src/pwd.c
-		echo "*/" >> Bin/cmd_src/pwd.c
-		echo "#include <stdio.h>" >> Bin/cmd_src/pwd.c
-		echo "int main(void){" >> Bin/cmd_src/pwd.c
-		echo "printf(\"Command disallowed by admin...\n\");return -1;}" >> Bin/cmd_src/pwd.c
+		disallowed_c Bin/cmd_src/pwd.c
 
 	fi
 
