@@ -4,17 +4,22 @@
 #Purpose: Easily setup this Restricted-Shell
 
 #Change to 0 to turn auto updates off
-updates=0
+updates=1
 
 config=".config"
 
-echo "Updating repository..."
-
 if [[ "$updates" == "1" ]]
 then
+	echo "Updating repository..."
 	git pull origin master
 fi
 
+
+disallow_shell_command(){
+	echo "$(sed 's/^/#/' $shell_src)" > $shell_src
+	echo "echo \"Command is disallowed by admin...\"" >> $shell_src
+	shell_src=""
+}
 
 if [[ ! -f $config ]]
 then
@@ -28,8 +33,8 @@ then
 
 	if [[ "$option1" == "n" ]]
 	then
-		echo "$(sed 's/^/#/' Bin/ls)" > Bin/ls
-		echo "echo \"Command is disallowed by admin...\"" >> Bin/ls
+		shell_src="Bin/ls"
+		disallow_shell_command
 	fi
 
 	echo -e "\nThe 'pwd' command 'prints working directory'..."

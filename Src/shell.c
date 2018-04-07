@@ -89,9 +89,6 @@ int main ( int argc, char argv[64] ){
 
 		//Not a good idea for case specific things, will need to make its own function for better use
 		//Convert input to lowercase for unitext
-		//for(int i = 0; i <= strlen(input); i++){
-			//input[i] = tolower(input[i]);
-		//}
 
 		//Check to see if user wants to exit before re-running loop
 		//Have to check for newline too, because of fgets for input
