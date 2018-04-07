@@ -56,4 +56,10 @@ cd Src/
 
 clear
 
+#if [ ! -f Src/shell ]
+#then
+#	echo "An error occurred in compiling shell.c ... Please scroll up for errors"
+#	exit -1
+#fi
+
 ./shell

@@ -3,16 +3,10 @@
 #######################################################################################
 Author: NerdOfCode
 Purpose: A work in progress shell built in C... Designed to be lightweight and fast...
-Tested on: Antergos(Linux)
+Tested on: Ubuntu 16.04
 License: Apache-2.0
-Updated on: 3/10/18
+Updated on: 4/07/18
 #######################################################################################
-
-#########################################################
-!!WARNING WARNING WARNING WARNING WARNING WARNING!!
-=======================================================
-DOES NOT WORK ON CURRENTLY UBUNTU 16.04
-#########################################################
 
 #########################################################
 Documentation: Can be found on the github repository at:
@@ -81,10 +75,10 @@ int main ( int argc, char argv[64] ){
 				//Remove all characters up to last one...
 				short_pwd = remove_char_until(pwd_buffer, "/");
 				printf(YELLOW_TEXT "Command[%s]: " RESET, short_pwd);
-				printf("CD BUFFER: %s\n",cd_buffer);
+				//printf("CD BUFFER: %s\n",cd_buffer);
 				fgets(input,64,stdin);
 		}else{
-				printf(YELLOW_TEXT "Command: " RESET, " " );
+				printf(YELLOW_TEXT "Command: " RESET);
 				fgets(input,64,stdin);
 		}
 
