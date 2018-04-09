@@ -15,7 +15,7 @@ then
 fi
 
 #Shortcut to make sure all shell scripts are in fact executable
-chmod +x Src/*
+chmod +x Bin/*
 
 disallow_shell_command(){
 	echo "$(sed 's/^/#/' $shell_src)" > $shell_src
