@@ -1,3 +1,2 @@
 #!/bin/bash
 ls $@
-echo "Command is disallowed by admin..."
