@@ -4,7 +4,7 @@
 #Purpose: Easily setup this Restricted-Shell
 
 #Change to 0 to turn auto updates off
-updates=1
+updates=0
 
 config=".config"
 
@@ -14,6 +14,8 @@ then
 	git pull origin master
 fi
 
+#Shortcut to make sure all shell scripts are in fact executable
+chmod +x Src/*
 
 disallow_shell_command(){
 	echo "$(sed 's/^/#/' $shell_src)" > $shell_src
