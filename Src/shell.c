@@ -24,16 +24,11 @@ https://github.com/NerdOfCode/Restricted-Shell
 #include <string.h>
 #include "globals.h"
 
-//Default path to command Bin
-#define CMD_BIN "./../Bin/"
-
 //make our own version of 'bool'
 typedef int bool;
 
-#define TRUE 1
-#define FALSE 0
-
 //Function Prototypes
+void start_up();
 void clean_up();
 void help_commands();
 void commands();
@@ -41,7 +36,7 @@ void commands();
 char *remove_char_until();
 int parseCommand();
 int check_empty_beginning();
-
+int update_new_cd();
 
 char remove_char_result[128];
 
@@ -58,6 +53,9 @@ int main ( int argc, char argv[64] ){
 	pwd_test = malloc(64 * sizeof(char));
 	strcat(pwd_test,CMD_BIN);
 	strcat(pwd_test,"pwd");
+	
+	//Run our startup function
+	start_up();
 
 	if(access(pwd_test,F_OK) == 0){
 			//EXITSTATUS(system(CMD_BIN"pwd"));
@@ -71,6 +69,8 @@ int main ( int argc, char argv[64] ){
 		if(pwd_allowed == TRUE){
 				char pwd_buffer[128];
 				char *short_pwd;
+				//Just in case, run a function that changes the dir to the newly written one!
+				update_new_cd();
 				getcwd(pwd_buffer, sizeof(pwd_buffer));
 				//Remove all characters up to last one...
 				short_pwd = remove_char_until(pwd_buffer, "/");
@@ -115,7 +115,16 @@ int main ( int argc, char argv[64] ){
 	return 0;
 }
 
-void clean_up(){
+void start_up( void ){
+	//Delete any contents from the previous user in logs...
+	FILE *fptr;
+        char buffer[255];
+
+        fptr = fopen(USER_LOG, "w");
+	fclose(fptr);
+}
+
+void clean_up( void ){
 
 	printf("Cleaning up...\n");
 	//Reset color values
@@ -266,4 +275,16 @@ int parseCommand(char input[64]){
 	memset(input, 0, 64);
 
 	return 0;
+}
+
+
+int update_new_cd( void ){
+	//Get the new directory from the log file
+	FILE *fptr;
+	char buffer[255];
+
+	fptr = fopen(USER_LOG, "r");
+	fscanf(fptr, "%s", buffer);
+	//We should probably add a security mechanism here at a later date... 4/17/18
+	chdir(buffer);
 }
