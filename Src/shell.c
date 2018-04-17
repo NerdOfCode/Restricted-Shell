@@ -4,8 +4,9 @@
 Author: NerdOfCode
 Purpose: A work in progress shell built in C... Designed to be lightweight and fast...
 Tested on: Ubuntu 16.04
+Status: Working
 License: Apache-2.0
-Updated on: 4/07/18
+Updated on: 4/17/18
 #######################################################################################
 
 #########################################################
@@ -42,7 +43,6 @@ int parseCommand();
 int check_empty_beginning();
 
 
-//Basically the result of shorteneded
 char remove_char_result[128];
 
 int main ( int argc, char argv[64] ){
@@ -51,7 +51,7 @@ int main ( int argc, char argv[64] ){
 	char input[64] = "";
 	char *string_compare = "";
 
-	//Test if user is allowed to user pwd and if allowed show the working directory
+	//Test if user is allowed to use pwd and if allowed show the working directory
 	char *pwd_test;
 	int return_test_value;
 
@@ -154,9 +154,9 @@ char *remove_char_until(char specified_buffer[128],char remove_char[2]){
 	}
 	i=0;
 	while(highest != strlen(specified_buffer)){
-			highest++;
-		  remove_char_result[i] = specified_buffer[highest];
-			i++;
+		highest++;
+		remove_char_result[i] = specified_buffer[highest];
+		i++;
 	}
 
 	return remove_char_result;
@@ -254,7 +254,6 @@ int parseCommand(char input[64]){
 			system(filename_ptr);
 		}else{
 				system(filename_ptr);
-
 		}
 	}else{
 		puts("Command not found...");
