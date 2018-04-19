@@ -219,7 +219,7 @@ int parseCommand(char input[64]){
 	//or 'ls -fdsafajfsdfl || exec /bin/bash'
 
 	for(int i = 0; i <= strlen(input); i++){
-		if(input[i] == '&' || input[i] == '|'){
+		if(input[i] == '&' || input[i] == '|' || input[i] == ';'){
 				fprintf(stderr,"Illegal character detected...\n");
 				return 0;
 		}
