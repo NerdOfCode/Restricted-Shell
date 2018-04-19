@@ -130,9 +130,14 @@ void clean_up( void ){
 	//Reset color values
 	printf("%s\n",RESET);
 	//TODO
-	// - close any files used for logging
+	// - close and sanitize any files used for logging
 
+ 	//Delete any contents from the previous user in logs...
+        FILE *fptr;
+        char buffer[255];
 
+        fptr = fopen(USER_LOG, "w");
+        fclose(fptr);
 }
 
 void help_commands(){

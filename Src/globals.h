@@ -6,10 +6,10 @@
 #define RESET "\x1B[0m"
 
 //Default Log file for user
-#define USER_LOG "../Logs/cwd.db"
+#define USER_LOG "/etc/Restricted-Shell/Logs/cwd.db"
 
 //Default path to command Bin
-#define CMD_BIN "./../Bin/"
+#define CMD_BIN "/etc/Restricted-Shell/Bin/"
 
 #define TRUE 1
 #define FALSE 0
