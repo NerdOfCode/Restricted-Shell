@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "../../Src/globals.h"
 
 //If directory change success, return 0 and write to file
 int write_change();
@@ -33,8 +34,8 @@ int write_change(char *copy){
 
 	//Protect against errors
 	if(fptr == NULL){
-		puts("File Access Error[FAE]...");
-		puts("Error 1001...");
+		puts(RED_TEXT"File Access Error[FAE]...");
+		puts("Error 1001..."RESET);
 		return -1;
 	}
 
