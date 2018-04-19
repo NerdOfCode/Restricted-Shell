@@ -146,10 +146,12 @@ void help_commands(){
 }
 
 void commands(){
-   	printf("Current usage:\n");
-        printf("exit --> Exits this shell...\n");
-        printf("pwd --> Prints the working directory\n");
-        printf("clear --> Clears the screen");
+   	puts("Current usage:");
+        puts("exit --> Exits this shell...");
+        puts("pwd --> Prints the working directory");
+        puts("clear --> Clears the screen");
+	puts("cd --> Change directory");
+	puts("ls --> list directory contents");
         puts("");
 
 }
@@ -167,6 +169,7 @@ char *remove_char_until(char specified_buffer[128],char remove_char[2]){
 			}
 	}
 	i=0;
+	//Remove characters up until the highest 
 	while(highest != strlen(specified_buffer)){
 		highest++;
 		remove_char_result[i] = specified_buffer[highest];

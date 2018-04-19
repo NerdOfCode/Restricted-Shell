@@ -9,7 +9,6 @@ cat <<EOF
 
 EOF
 
-echo "By NerdOfCode"
-echo "Version: 0.01 Alpha"
-echo "Last updated on: 4/8/18"
-echo -e "\n"
+printf "By: NerdOfCode!\n"
+printf "Version: 0.01 Alpha\n"
+printf "Last updated on: 4/19/18\n\n"
