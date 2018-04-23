@@ -70,7 +70,7 @@ int main ( int argc, char argv[64] ){
 				char pwd_buffer[128];
 				char *short_pwd;
 				//Just in case, run a function that changes the dir to the newly written one!
-				update_new_cd();
+				update_new_cd(0);
 				getcwd(pwd_buffer, sizeof(pwd_buffer));
 				//Remove all characters up to last one...
 				short_pwd = remove_char_until(pwd_buffer, "/");
@@ -88,7 +88,6 @@ int main ( int argc, char argv[64] ){
 		// - logging
 
 		//Not a good idea for case specific things, will need to make its own function for better use
-		//Convert input to lowercase for unitext
 
 		//Check to see if user wants to exit before re-running loop
 		//Have to check for newline too, because of fgets for input
@@ -128,7 +127,7 @@ void clean_up( void ){
 
 	printf("Cleaning up...\n");
 	//Reset color values
-	printf("%s\n",RESET);
+	puts(RESET);
 	//TODO
 	// - close and sanitize any files used for logging
 
@@ -136,6 +135,7 @@ void clean_up( void ){
         FILE *fptr;
         char buffer[255];
 
+	//Get rid of users cwd
         fptr = fopen(USER_LOG, "w");
         fclose(fptr);
 }
@@ -220,6 +220,7 @@ int parseCommand(char input[64]){
 
 	//Prevent user from escaping by running something like: 'ls && exec /bin/bash'
 	//or 'ls -fdsafajfsdfl || exec /bin/bash'
+	//or 'ls;bash'
 
 	for(int i = 0; i <= strlen(input); i++){
 		if(input[i] == '&' || input[i] == '|' || input[i] == ';'){
@@ -241,22 +242,28 @@ int parseCommand(char input[64]){
 
 	}
 
-
-	//Check if command exists relative to its filename
-
+	//Obliterate filename_ptr
+	//And check if command exists relative to its filename
+	memset(filename_ptr, 0, sizeof(filename_ptr));
 	strcat(filename_ptr,CMD_BIN);
 	strcat(filename_ptr,command_ptr);
 
-
 	//Only remove newline if command has arguments
 	if(command_args){
-			filename_ptr[strlen(filename_ptr)-1] = '\0';
+		filename_ptr[strlen(filename_ptr)-1] = '\0';
 	}
 
-	command_ptr[strlen(command_ptr)-1] = '\0';
-	input[strlen(input)-1] = '\0';
+
+        command_ptr[strlen(command_ptr)-1] = '\0';
+        input[strlen(input)-1] = '\0';
 
 
+	//TEMPORARY FIX!!! 4/20/18
+	//SPECIAL CASE: If command is cd, give a heads up to update the cwd
+	if(strncmp(command_ptr,"c", sizeof(command_ptr)) == 0){
+		puts("SETTING");
+		update_new_cd(1);
+	}
 
 	//If command or rather file is found, proceed
 	if(access(filename_ptr, F_OK) == 0){
@@ -265,7 +272,7 @@ int parseCommand(char input[64]){
 		if(input != command_ptr){
 
 			//Reset to default users args
-			memset(filename_ptr, 0, 64);
+			memset(filename_ptr, 0, 128);
 			strcat(filename_ptr, CMD_BIN);
 			strcat(filename_ptr, input);
 			system(filename_ptr);
@@ -285,14 +292,29 @@ int parseCommand(char input[64]){
 	return 0;
 }
 
+//Basically reads the cwd.db log file and takes the cwd from it
 
-int update_new_cd( void ){
+int update_new_cd( int update ){
 	//Get the new directory from the log file
 	FILE *fptr;
-	char buffer[255];
+	char buffer[255] = " ";
 
 	fptr = fopen(USER_LOG, "r");
 	fscanf(fptr, "%s", buffer);
-	//We should probably add a security mechanism here at a later date... 4/17/18
-	chdir(buffer);
+	fclose(fptr);
+	//Prevent changing the directory twice...
+	if(update == 1){
+		if(strcmp(buffer, "..")){
+			//Write over file
+			truncate(USER_LOG, 0);
+			memset(buffer, 0, sizeof(buffer));
+			return 0;
+		}
+	}else{
+		//We should probably add a security mechanism here at a later date... 4/17/18
+		chdir(buffer);
+	}
+
+	return 0;
 }
+

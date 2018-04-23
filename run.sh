@@ -8,6 +8,9 @@ updates=0
 
 config=".config"
 
+#Change to 1 if you don't want to recompile if built
+dont_compile=0
+
 if [[ "$updates" == "1" ]]
 then
 	echo "Updating repository..."
@@ -16,6 +19,18 @@ fi
 
 #Shortcut to make sure all shell scripts are in fact executable
 chmod +x Bin/*
+
+check_exec(){
+	if [[ -f Src/shell ]]
+	then
+		echo "This shell appears to already be compiled..."
+		read -p "Would you like to run without re-compiling, (y)es or (n)o: " option
+	fi
+	if [[ "$option" == "y" ]]
+	then
+		dont_compile=1
+	fi
+}
 
 disallow_shell_command(){
 	echo "$(sed 's/^/#/' $1)" > $1
@@ -32,6 +47,7 @@ disallow_c_command(){
                 echo "printf(\"Command disallowed by admin...\n\");return -1;}" >> $1
 }
 
+check_exec
 
 if [[ ! -f $config ]]
 then
@@ -60,11 +76,14 @@ then
 	touch $config
 fi
 
-make
+if [[ $dont_compile -eq 0 ]]
+then
+	make
+fi
 
 cd Src/
 
-clear
+#clear
 
 #if [ ! -f Src/shell ]
 #then
