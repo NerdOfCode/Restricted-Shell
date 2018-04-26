@@ -6,7 +6,7 @@ Purpose: A work in progress shell built in C... Designed to be lightweight and f
 Tested on: Ubuntu 16.04
 Status: Working
 License: Apache-2.0
-Updated on: 4/17/18
+Updated on: 4/23/18
 #######################################################################################
 
 #########################################################
@@ -37,7 +37,6 @@ char *remove_char_until();
 int parseCommand();
 int check_empty_beginning();
 int update_new_cd();
-
 char remove_char_result[128];
 
 int main ( int argc, char argv[64] ){
@@ -151,7 +150,8 @@ void commands(){
         puts("pwd --> Prints the working directory");
         puts("clear --> Clears the screen");
 	puts("cd --> Change directory");
-	puts("ls --> list directory contents");
+	puts("ls --> List directory contents");
+	puts("version --> Prints version-related info");
         puts("");
 
 }
@@ -201,6 +201,7 @@ int parseCommand(char input[64]){
 	char *command_ptr;
 	bool command_args = FALSE;
 	int command_status = 0;
+
 	//The command_ptr is for the user input but without any arguments attached
 
 	//Dynamic memory  allocation
@@ -257,13 +258,13 @@ int parseCommand(char input[64]){
         command_ptr[strlen(command_ptr)-1] = '\0';
         input[strlen(input)-1] = '\0';
 
-
 	//TEMPORARY FIX!!! 4/20/18
-	//SPECIAL CASE: If command is cd, give a heads up to update the cwd
-	if(strncmp(command_ptr,"c", sizeof(command_ptr)) == 0){
-		puts("SETTING");
-		update_new_cd(1);
-	}
+        //SPECIAL CASE: If command is cd, give a heads up to update the cwd
+        if(strncmp(command_ptr,"c", sizeof(command_ptr)) == 0){
+                update_new_cd(1);
+        }
+
+
 
 	//If command or rather file is found, proceed
 	if(access(filename_ptr, F_OK) == 0){
@@ -277,11 +278,12 @@ int parseCommand(char input[64]){
 			strcat(filename_ptr, input);
 			system(filename_ptr);
 		}else{
-				system(filename_ptr);
+			system(filename_ptr);
 		}
 	}else{
 		puts("Command not found...");
 	}
+
 
 	//Reset variables
 	command_args = FALSE;
@@ -297,24 +299,34 @@ int parseCommand(char input[64]){
 int update_new_cd( int update ){
 	//Get the new directory from the log file
 	FILE *fptr;
-	char buffer[255] = " ";
+	char cd_buffer[255] = "";
+	char cwd[1024] = "";
 
 	fptr = fopen(USER_LOG, "r");
-	fscanf(fptr, "%s", buffer);
+	fscanf(fptr, "%s", cd_buffer);
 	fclose(fptr);
-	//Prevent changing the directory twice...
-	if(update == 1){
-		if(strcmp(buffer, "..")){
-			//Write over file
-			truncate(USER_LOG, 0);
-			memset(buffer, 0, sizeof(buffer));
-			return 0;
-		}
+
+	if(strcmp(cd_buffer,"../") || strcmp(cd_buffer,"..")){
+		//Write over file
+		//LINUX SYSTEM DEPENDENT
+		truncate(USER_LOG, 0);
+		chdir(cd_buffer);
+		memset(cd_buffer, 0, sizeof(cd_buffer));
 	}else{
 		//We should probably add a security mechanism here at a later date... 4/17/18
-		chdir(buffer);
+		chdir(cd_buffer);
 	}
+
+
+	/*
+   	if(getcwd(cwd, sizeof(cwd)) != NULL){
+       		printf("Current working dir: %s\n", cwd);
+   	}else{
+		fprintf(stderr, "cwd() error");
+	}
+	*/
 
 	return 0;
 }
+
 
