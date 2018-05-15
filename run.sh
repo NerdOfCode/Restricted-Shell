@@ -69,7 +69,7 @@ then
 
 	if [[ "$option1" != "y" ]]
 	then
-		dissallow_c_command "Bin/pwd"
+		disallow_c_command "Bin/cmd_src/pwd.c"
 
 	fi
 
@@ -92,3 +92,4 @@ cd Src/
 #fi
 
 ./shell
+

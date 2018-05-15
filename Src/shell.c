@@ -37,6 +37,9 @@ char *remove_char_until();
 int parseCommand();
 int check_empty_beginning();
 int update_new_cd();
+void warn_user();
+void log_command();
+
 char remove_char_result[128];
 
 int main ( int argc, char argv[64] ){
@@ -55,6 +58,9 @@ int main ( int argc, char argv[64] ){
 	
 	//Run our startup function
 	start_up();
+
+	//Run function to warn user of any settings enabled by the admin
+	warn_user();
 
 	if(access(pwd_test,F_OK) == 0){
 			//EXITSTATUS(system(CMD_BIN"pwd"));
@@ -84,7 +90,7 @@ int main ( int argc, char argv[64] ){
 		memset(pwd_test,0,sizeof(pwd_test));
 
 		//TODO
-		// - logging
+		log_command(input);
 
 		//Not a good idea for case specific things, will need to make its own function for better use
 
@@ -118,7 +124,7 @@ void start_up( void ){
 	FILE *fptr;
         char buffer[255];
 
-        fptr = fopen(USER_LOG, "w");
+        fptr = fopen(USER_CD_LOG, "w");
 	fclose(fptr);
 }
 
@@ -135,7 +141,7 @@ void clean_up( void ){
         char buffer[255];
 
 	//Get rid of users cwd
-        fptr = fopen(USER_LOG, "w");
+        fptr = fopen(USER_CD_LOG, "w");
         fclose(fptr);
 }
 
@@ -302,14 +308,14 @@ int update_new_cd( int update ){
 	char cd_buffer[255] = "";
 	char cwd[1024] = "";
 
-	fptr = fopen(USER_LOG, "r");
+	fptr = fopen(USER_CD_LOG, "r");
 	fscanf(fptr, "%s", cd_buffer);
 	fclose(fptr);
 
 	if(strcmp(cd_buffer,"../") || strcmp(cd_buffer,"..")){
 		//Write over file
 		//LINUX SYSTEM DEPENDENT
-		truncate(USER_LOG, 0);
+		truncate(USER_CD_LOG, 0);
 		chdir(cd_buffer);
 		memset(cd_buffer, 0, sizeof(cd_buffer));
 	}else{
@@ -327,6 +333,35 @@ int update_new_cd( int update ){
 	*/
 
 	return 0;
+}
+
+void log_command(char *command){
+	FILE *fptr = fopen(USER_LOG,"a");
+
+        //Protect against errors
+        if(fptr == NULL){
+                puts(RED_TEXT"A mini-kernel panic has occurred... Please show the following error to your local admin!"RESET);
+		puts(RED_TEXT"Error 1002"RESET);
+        }
+
+        //Print the new dir to our file
+        fprintf(fptr,"%s",command);
+        fclose(fptr);
+}
+
+//Basically give the user a heads up that the admin is using logging tools and whatnot
+//Also, since this function is most likely going to be run when the shell is activated, 
+//We will need to clear the screen
+
+void warn_user( void ){
+
+	//-->
+	system(CMD_BIN"clear");
+
+	if(LOGGING == TRUE){
+		puts(RED_TEXT"CAUTION: Log Mode On" RESET);
+	}
+
 }
 
 
