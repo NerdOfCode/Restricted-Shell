@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
 }
 
 int write_change(char *copy){
-	FILE *fptr = fopen(USER_LOG,"w");
+	FILE *fptr = fopen(USER_CD_LOG,"w");
 
 	//Protect against errors
 	if(fptr == NULL){
