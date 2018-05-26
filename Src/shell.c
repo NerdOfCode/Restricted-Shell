@@ -25,7 +25,7 @@ https://github.com/NerdOfCode/Restricted-Shell
 #include "globals.h"
 
 //make our own version of 'bool'
-//typedef int bool;
+typedef int bool;
 
 //Function Prototypes
 void start_up();
