@@ -18,3 +18,4 @@ cd Restricted-Shell && ./run.sh
 And Congratulations on setting up this Restricted-Shell!
 
 Enjoy!!! Oh, and also if anyone is to come across any errors or suggestions, please feel free to send an email to admin@nerdofcode.com!
+

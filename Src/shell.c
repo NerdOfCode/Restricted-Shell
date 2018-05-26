@@ -25,7 +25,7 @@ https://github.com/NerdOfCode/Restricted-Shell
 #include "globals.h"
 
 //make our own version of 'bool'
-typedef int bool;
+//typedef int bool;
 
 //Function Prototypes
 void start_up();
@@ -55,7 +55,7 @@ int main ( int argc, char argv[64] ){
 	pwd_test = malloc(64 * sizeof(char));
 	strcat(pwd_test,CMD_BIN);
 	strcat(pwd_test,"pwd");
-	
+
 	//Run our startup function
 	start_up();
 
@@ -81,11 +81,21 @@ int main ( int argc, char argv[64] ){
 				short_pwd = remove_char_until(pwd_buffer, "/");
 				printf(YELLOW_TEXT "Command[%s]: " RESET, short_pwd);
 				//printf("CD BUFFER: %s\n",cd_buffer);
+
+
+				//TODO --> Real Time History Check
+				//Send all key calls directly to stdin
+				//system("/bin/stty raw");
+			        //Send STTY back to normal behavior
+                		//system("/bin/stty cooked");
+
 				fgets(input,64,stdin);
+
 		}else{
 				printf(YELLOW_TEXT "Command: " RESET);
 				fgets(input,64,stdin);
 		}
+
 
 		memset(pwd_test,0,sizeof(pwd_test));
 
