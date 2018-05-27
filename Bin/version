@@ -10,5 +10,5 @@ cat <<EOF
 EOF
 
 printf "By: NerdOfCode!\n"
-printf "Version: 0.01 Alpha\n"
-printf "Last updated on: 5/25/18\n\n"
+printf "Version: 0.02 Alpha\n"
+printf "Last updated on: 5/27/18\n\n"
