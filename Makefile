@@ -3,7 +3,7 @@ all: shell commands
 shell:
 	rm -f Src/shell~
 
-	gcc -o Src/shell Src/shell.c -lncurses
+	gcc -o Src/shell Src/shell.c
 
 commands:
 

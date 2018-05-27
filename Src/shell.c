@@ -21,7 +21,6 @@ https://github.com/NerdOfCode/Restricted-Shell
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h> //Access
-#include <string.h>
 #include "globals.h"
 
 //make our own version of 'bool'
