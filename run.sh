@@ -89,7 +89,7 @@ create_admin_acc(){
 		sign_in
 	fi
 
-	if [ $add_admin != 0 ]
+	if [[ $add_admin != 0 ]]
 	then
 		printf "${RED}One More Thing! It is Time to setup the Admin account!\n"
 		printf "Enter the following information!${RESET}\n"

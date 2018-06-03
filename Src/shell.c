@@ -6,7 +6,7 @@ Purpose: A work in progress shell built in C... Designed to be lightweight and f
 Tested on: Ubuntu 16.04
 Status: Working
 License: Apache-2.0
-Updated on: 4/23/18
+Updated on: 6/2/18
 #######################################################################################
 
 #########################################################
@@ -46,6 +46,8 @@ int main ( int argc, char argv[64] ){
 	bool pwd_allowed = FALSE;
 	char input[64] = "";
 	char *string_compare = "";
+	char *logged_in_user = "";
+	char *hostname = "";
 
 	//Test if user is allowed to use pwd and if allowed show the working directory
 	char *pwd_test;
@@ -69,6 +71,13 @@ int main ( int argc, char argv[64] ){
 			}
 	}
 
+	//Get user and hostname here to eliminate repetitive use!
+	logged_in_user = malloc(64 * sizeof(char));
+	logged_in_user = getlogin();
+	
+	hostname = malloc(64 * sizeof(char));
+	hostname = getenv(HOSTNAME);
+
 	while(1){
 		if(pwd_allowed == TRUE){
 				char pwd_buffer[128];
@@ -78,7 +87,7 @@ int main ( int argc, char argv[64] ){
 				getcwd(pwd_buffer, sizeof(pwd_buffer));
 				//Remove all characters up to last one...
 				short_pwd = remove_char_until(pwd_buffer, "/");
-				printf(YELLOW_TEXT "Command[%s]: " RESET, short_pwd);
+				printf(YELLOW_TEXT "%s@%s[%s]: " RESET, logged_in_user,hostname,short_pwd);
 				//printf("CD BUFFER: %s\n",cd_buffer);
 
 
@@ -124,6 +133,9 @@ int main ( int argc, char argv[64] ){
 	}
 	//Start the clean up b4 exit
 	clean_up();
+
+	//Start to free dynamically allocated memory
+	free(pwd_test);
 
 	return 0;
 }

@@ -13,6 +13,7 @@ commands:
 	rm -f Bin/cd~
 	rm -f Bin/rm~
 	rm -f Bin/whoami~
+	rm -f Bin/hostname~
 
 	gcc -o Bin/test Bin/cmd_src/test.c 
 	gcc -o Bin/clear Bin/cmd_src/clear.c
@@ -20,3 +21,4 @@ commands:
 	gcc -o Bin/cd Bin/cmd_src/cd.c
 	gcc -o Bin/rm Bin/cmd_src/rm.c 
 	gcc -o Bin/whoami Bin/cmd_src/whoami.c
+	gcc -o Bin/hostname Bin/cmd_src/hostname.c

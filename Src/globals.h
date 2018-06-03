@@ -18,3 +18,8 @@
 #define FALSE 0
 
 #define LOGGING 0
+
+//Platform detection
+#if defined(__linux__)
+	#define HOSTNAME "USER"
+#endif
