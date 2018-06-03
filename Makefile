@@ -14,6 +14,7 @@ commands:
 	rm -f Bin/rm~
 	rm -f Bin/whoami~
 	rm -f Bin/hostname~
+	rm -f Bin/time~
 
 	gcc -o Bin/test Bin/cmd_src/test.c 
 	gcc -o Bin/clear Bin/cmd_src/clear.c
@@ -22,3 +23,4 @@ commands:
 	gcc -o Bin/rm Bin/cmd_src/rm.c 
 	gcc -o Bin/whoami Bin/cmd_src/whoami.c
 	gcc -o Bin/hostname Bin/cmd_src/hostname.c
+	gcc -o Bin/time Bin/cmd_src/time.c

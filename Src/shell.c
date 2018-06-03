@@ -136,6 +136,8 @@ int main ( int argc, char argv[64] ){
 
 	//Start to free dynamically allocated memory
 	free(pwd_test);
+	free(logged_in_user);
+	free(hostname);
 
 	return 0;
 }
@@ -179,6 +181,8 @@ void commands(){
 	puts("cd --> Change directory");
 	puts("ls --> List directory contents");
 	puts("version --> Prints version-related info");
+	puts("hostname --> Display local hostname");
+	puts("whoami --> Output current user");
         puts("");
 
 }
