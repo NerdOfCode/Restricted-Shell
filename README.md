@@ -17,10 +17,12 @@ cd Restricted-Shell && ./run.sh
 ```
 And Congratulations on setting up this Restricted-Shell!
 
-If you're interested in using this shell full-time, simply edit the `/etc/passwd` file and change to the following:
+If you're interested in using this shell full-time, simply edit the `/etc/passwd` file and change to the following, by running:
 
 ```shell
-username_here:x:1004:1003:,,,:/home/test:/etc/Restricted-Shell/run.sh
+sudo vipw 
+
+USERNAME_HERE:x:1004:1003:,,,:/home/USERNAME_HERE:/etc/Restricted-Shell/run.sh
 ```
 
 Enjoy!!! Oh, and also if anyone is to come across any errors or suggestions, please feel free to send an email to admin@nerdofcode.com!
