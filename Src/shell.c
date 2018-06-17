@@ -6,7 +6,7 @@ Purpose: A work in progress shell built in C... Designed to be lightweight and f
 Tested on: Ubuntu 16.04
 Status: Working
 License: Apache-2.0
-Updated on: 6/9/18
+Updated on: 6/17/18
 #######################################################################################
 
 #########################################################
@@ -175,14 +175,15 @@ void help_commands(){
 
 void commands(){
    	puts("Current usage:");
-        puts("exit --> Exits this shell...");
-        puts("pwd --> Prints the working directory");
-        puts("clear --> Clears the screen");
-	puts("cd --> Change directory");
-	puts("ls --> List directory contents");
-	puts("version --> Prints version-related info");
-	puts("hostname --> Display local hostname");
-	puts("whoami --> Output current user");
+        puts("exit");
+        puts("pwd");
+        puts("clear");
+	puts("cd");
+	puts("ls");
+	puts("version");
+	puts("hostname");
+	puts("whoami");
+	puts("flags");
         puts("");
 
 }
