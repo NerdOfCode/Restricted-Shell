@@ -1,4 +1,4 @@
-/*
+	/*
 
 #######################################################################################
 Author: NerdOfCode
@@ -39,6 +39,7 @@ int update_new_cd();
 void warn_user();
 void log_command();
 
+//Globals
 char remove_char_result[128];
 
 int main ( int argc, char argv[64] ){
@@ -74,9 +75,18 @@ int main ( int argc, char argv[64] ){
 	//Get user and hostname here to eliminate repetitive use!
 	logged_in_user = malloc(64 * sizeof(char));
 	logged_in_user = getlogin();
-	
+
+	//TODO
+	//Create a better method for the following
+	//Assume users directory is /home/logged_in_user
+	char current_user_home[64] = "/home/";
+	strcat(current_user_home,logged_in_user);
+	chdir(current_user_home);
+
 	hostname = malloc(64 * sizeof(char));
 	hostname = getenv(HOSTNAME);
+
+	start_up();
 
 	while(1){
 		if(pwd_allowed == TRUE){
@@ -148,7 +158,9 @@ void start_up( void ){
         char buffer[255];
 
         fptr = fopen(USER_CD_LOG, "w");
+
 	fclose(fptr);
+
 }
 
 void clean_up( void ){
@@ -341,7 +353,12 @@ int update_new_cd( int update ){
 	if(strcmp(cd_buffer,"../") || strcmp(cd_buffer,"..")){
 		//Write over file
 		//LINUX SYSTEM DEPENDENT
+		if(HOSTNAME != "USER"){
+			puts("This system is not supported...");
+			exit(1);
+		}
 		truncate(USER_CD_LOG, 0);
+
 		chdir(cd_buffer);
 		memset(cd_buffer, 0, sizeof(cd_buffer));
 	}else{
