@@ -17,7 +17,7 @@
 #define TRUE 1
 #define FALSE 0
 
-#define LOGGING 0
+#define LOGGING 1
 
 //Platform detection
 #if defined(__linux__)

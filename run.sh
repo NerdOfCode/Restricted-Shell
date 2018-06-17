@@ -110,6 +110,7 @@ if [[ ! -f $config ]]
 then
 
 	clear
+
 	#Prompt user to allow what commands
 	echo -e "Please choose what commands to allow your users to use below: \n"
 
