@@ -56,7 +56,7 @@ int write_change(char *copy){
 
 void audit_dir(char *dir){
 
-	if(strstr(DEFAULT_LOCATION, dir) != NULL){
+	if(strstr(dir,DEFAULT_LOCATION) != NULL){
 		puts(RED_TEXT"Access Denied: 1004"RESET);
 		exit(-1);
 	}
