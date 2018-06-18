@@ -1,4 +1,4 @@
-	/*
+/*
 
 #######################################################################################
 Author: NerdOfCode
@@ -31,23 +31,26 @@ void start_up();
 void clean_up();
 void help_commands();
 void commands();
+void warn_user();
+void log_command();
+void change_to_home_dir();
 
 char *remove_char_until();
+
 int parseCommand();
 int check_empty_beginning();
 int update_new_cd();
-void warn_user();
-void log_command();
+
 
 //Globals
 char remove_char_result[128];
+char *logged_in_user;
 
 int main ( int argc, char argv[64] ){
 
 	bool pwd_allowed = FALSE;
 	char input[64] = "";
 	char *string_compare = "";
-	char *logged_in_user = "";
 	char *hostname = "";
 
 	//Test if user is allowed to use pwd and if allowed show the working directory
@@ -76,12 +79,7 @@ int main ( int argc, char argv[64] ){
 	logged_in_user = malloc(64 * sizeof(char));
 	logged_in_user = getlogin();
 
-	//TODO
-	//Create a better method for the following
-	//Assume users directory is /home/logged_in_user
-	char current_user_home[64] = "/home/";
-	strcat(current_user_home,logged_in_user);
-	chdir(current_user_home);
+	change_to_home_dir();
 
 	hostname = malloc(64 * sizeof(char));
 	hostname = getenv(HOSTNAME);
@@ -150,6 +148,17 @@ int main ( int argc, char argv[64] ){
 	free(hostname);
 
 	return 0;
+}
+
+
+//Basically change to the users home directory
+void change_to_home_dir(){
+	//TODO
+        //Create a better method for the following
+        //Assume users directory is /home/logged_in_user
+        char current_user_home[64] = "/home/";
+        strcat(current_user_home,logged_in_user);
+        chdir(current_user_home);
 }
 
 void start_up( void ){
