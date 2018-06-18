@@ -152,7 +152,7 @@ int main ( int argc, char argv[64] ){
 
 
 //Basically change to the users home directory
-void change_to_home_dir(){
+void change_to_home_dir( void ){
 	//TODO
         //Create a better method for the following
         //Assume users directory is /home/logged_in_user
