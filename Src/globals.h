@@ -4,9 +4,11 @@
 //Used for User-command logging
 #define LOGGING 1
 
+//Used for storing users commands to a specific file in their home directory
+#define LOG_FILE ".r-shell_history"
 
-//NO EDIT
-/**********************/
+//Only Edit Below If You Can Afford To Break Things
+/*****************************/
 
 //Color Constants
 #define RED_TEXT "\033[1;31m"
@@ -22,7 +24,7 @@
 #define USER_CD_LOG "/etc/Restricted-Shell/Logs/cwd.db"
 
 //Where commands are logged to...
-#define USER_LOG "/etc/Restricted-Shell/Logs/user.log"
+//#define USER_LOG "/etc/Restricted-Shell/Logs/user.log"
 
 //Default path to command Bin
 #define CMD_BIN "/etc/Restricted-Shell/Bin/"

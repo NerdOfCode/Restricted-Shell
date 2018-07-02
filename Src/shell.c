@@ -6,7 +6,7 @@ Purpose: A work in progress shell built in C... Designed to be lightweight and f
 Tested on: Ubuntu 16.04
 Status: Working
 License: Apache-2.0
-Updated on: 6/17/18
+Updated on: 7/2/18
 #######################################################################################
 
 #########################################################
@@ -32,7 +32,6 @@ void clean_up();
 void help_commands();
 void commands();
 void warn_user();
-void log_command();
 void change_to_home_dir();
 
 char *remove_char_until();
@@ -40,10 +39,11 @@ char *remove_char_until();
 int parseCommand();
 int check_empty_beginning();
 int update_new_cd();
-
+int log_command();
 
 //Globals
 char remove_char_result[128];
+char *home_dir;
 char *logged_in_user;
 
 int main ( int argc, char argv[64] ){
@@ -149,7 +149,6 @@ int main ( int argc, char argv[64] ){
 
 	return 0;
 }
-
 
 //Basically change to the users home directory
 void change_to_home_dir( void ){
@@ -387,14 +386,22 @@ int update_new_cd( int update ){
 	return 0;
 }
 
-void log_command(char *command){
-	FILE *fptr = fopen(USER_LOG,"a");
+int log_command(char *command){
+	//Convert Log File to include home directory
+	char home_dir_log[64] = "/home/";
+
+	strcat(home_dir_log,logged_in_user);
+
+	strcat(home_dir_log,"/"LOG_FILE);
+
+	FILE *fptr = fopen(home_dir_log,"a");
 
         //Protect against errors
         if(fptr == NULL){
                 puts(RED_TEXT"A mini-kernel panic has occurred... Please show the following error to your local admin!"RESET);
 		puts(RED_TEXT"Error 1002"RESET);
-        }
+        	return -1;
+	}
 
         //Print the new dir to our file
         fprintf(fptr,"%s",command);
@@ -408,12 +415,10 @@ void log_command(char *command){
 void warn_user( void ){
 
 	//-->
-	system(CMD_BIN"clear");
+	//system(CMD_BIN"clear");
 
 	if(LOGGING == TRUE){
 		puts(RED_TEXT"CAUTION: Log Mode On" RESET);
 	}
 
 }
-
-
