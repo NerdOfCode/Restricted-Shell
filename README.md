@@ -6,6 +6,8 @@ To easily setup this amazing restricted shell... Follow the below commands:
 
 First, you need to change to the only working directory right now, and then we can download the repository! You can accomplish such by running: 
 
+***Warning***: Running the below will most likely require "sudo" access!
+
 ```shell
 cd /etc/ && git clone git@github.com:NerdOfCode/Restricted-Shell.git
 ```
