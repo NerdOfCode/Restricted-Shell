@@ -1,6 +1,6 @@
 /*
 
-	Basically gets hostname upon call
+	Gets hostname upon call
 
 */
 

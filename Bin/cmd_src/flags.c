@@ -1,9 +1,6 @@
 /*
-
-	Purpose: Designed to show the user any global settings that directly affect them
-	Usage: flags
-
-*/
+//Purpose: Designed to show the user any global settings that directly affect them
+//Usage: flags
 
 #include <stdio.h>
 #include "../../Src/globals.h"
@@ -23,3 +20,7 @@ int main( void ){
 	return 0;
 
 }
+*/
+#include <stdio.h>
+int main(void){
+printf("Command disallowed by admin...\n");return -1;}

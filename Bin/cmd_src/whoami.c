@@ -2,7 +2,12 @@
 #include <unistd.h>
 #include "../../Src/globals.h"
 
-int main(void){
+int main(int argc){
+
+	if(argc >= 2){
+		return 1;
+	}
+
 	char *username = getlogin();
 
 	if(username == NULL){

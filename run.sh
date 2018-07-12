@@ -11,7 +11,8 @@ config=".config"
 #Change to 1 if you don't want to recompile if built
 dont_compile=0
 
-##Where users are stroed
+##Where users are stored
+##UNUSED AS OF 7/10/18
 user_db="Logs/users.db"
 
 ##FOR COLOR COATING
@@ -114,22 +115,56 @@ then
 	#Prompt user to allow what commands
 	echo -e "Please choose what commands to allow your users to use below: \n"
 
-	echo "The 'ls' command basically lists files and folders in a directory"
-	read -p  "Would you like to allow the 'ls' command(y/n): " option1
+	read -p  "'ls'(y/n): " option1
 
 	if [[ "$option1" != "y" ]]
 	then
 		disallow_shell_command "Bin/ls"
 	fi
 
-	echo -e "\nThe 'pwd' command 'prints working directory'..."
-	read -p "Would you like to allow the 'pwd' command(y/n): " option1
+	read -p "'nano'(y/n): " option1
+	
+	if [[ "$option1" != "y" ]]
+	then
+		disallow_shell_command "Bin/nano"
+	fi
+
+	read -p "'pwd'(y/n): " option1
 
 	if [[ "$option1" != "y" ]]
 	then
 		disallow_c_command "Bin/cmd_src/pwd.c"
 
 	fi
+
+	read -p "'flags'(y/n): "
+
+	if [[ "$option1" != "y" ]]
+	then
+		disallow_c_command "Bin/cmd_src/flags.c"
+	fi
+
+	read -p "'cd'(y/n): " option1
+
+	if [[ "$option1" != "y" ]]
+	then
+		disallow_c_command "Bin/cmd_src/cd.c"
+	fi
+
+	read -p "'whoami'(y\n): " option1
+
+	if [[ "$option1" != "y" ]]
+	then
+		disallow_c_command "Bin/cmd_src/whoami.c"
+	fi
+
+	read -p "'hostname'(y/n): " option1
+
+	if [[ "$option1" != "y" ]]
+	then
+		disallow_c_command "Bin/cmd_src/hostname.c"
+	fi
+
 
 	touch $config
 fi

@@ -46,20 +46,30 @@ char remove_char_result[128];
 char *home_dir;
 char *logged_in_user;
 
+bool pwd_allowed = FALSE;
+bool whoami_allowed = FALSE;
+
 int main ( int argc, char argv[64] ){
 
-	bool pwd_allowed = FALSE;
 	char input[64] = "";
 	char *string_compare = "";
 	char *hostname = "";
 
 	//Test if user is allowed to use pwd and if allowed show the working directory
+	//Also test if user is allowed to use hostname and whomai
 	char *pwd_test;
-	int return_test_value;
+	int return_pwd_test_value;
+
+	char *whoami_test;
+	int return_whoami_test_value;
 
 	pwd_test = malloc(64 * sizeof(char));
 	strcat(pwd_test,CMD_BIN);
 	strcat(pwd_test,"pwd");
+
+	whoami_test = malloc(64 * sizeof(char));
+	strcat(whoami_test,CMD_BIN);
+	strcat(whoami_test,"whoami");
 
 	//Run our startup function
 	start_up();
@@ -68,11 +78,18 @@ int main ( int argc, char argv[64] ){
 	warn_user();
 
 	if(access(pwd_test,F_OK) == 0){
-			//EXITSTATUS(system(CMD_BIN"pwd"));
-			return_test_value = system(CMD_BIN"pwd -none");
-			if(WEXITSTATUS(return_test_value) == 0){
-					pwd_allowed = TRUE;
-			}
+		//EXITSTATUS(system(CMD_BIN"pwd"));
+		return_pwd_test_value = system(CMD_BIN"pwd -none");
+		if(WEXITSTATUS(return_pwd_test_value) == 0){
+			pwd_allowed = TRUE;
+		}
+	}
+
+	if(access(whoami_test,F_OK) == 0){
+		return_whoami_test_value = system(CMD_BIN"whoami -none");
+		if(WEXITSTATUS(return_whoami_test_value) == 1){
+			whoami_allowed = TRUE;
+		}
 	}
 
 	//Get user and hostname here to eliminate repetitive use!
@@ -87,29 +104,31 @@ int main ( int argc, char argv[64] ){
 	start_up();
 
 	while(1){
-		if(pwd_allowed == TRUE){
-				char pwd_buffer[128];
-				char *short_pwd;
-				//Just in case, run a function that changes the dir to the newly written one!
-				update_new_cd(0);
-				getcwd(pwd_buffer, sizeof(pwd_buffer));
-				//Remove all characters up to last one...
-				short_pwd = remove_char_until(pwd_buffer, "/");
-				printf(YELLOW_TEXT "%s@%s[%s]: " RESET, logged_in_user,hostname,short_pwd);
-				//printf("CD BUFFER: %s\n",cd_buffer);
+		if(pwd_allowed == TRUE && whoami_allowed == TRUE){
+			char pwd_buffer[128];
+			char *short_pwd;
+			//Just in case, run a function that changes the dir to the newly written one!
+			update_new_cd(0);
+			getcwd(pwd_buffer, sizeof(pwd_buffer));
+			//Remove all characters up to last one...
+			short_pwd = remove_char_until(pwd_buffer, "/");
+			printf(YELLOW_TEXT "%s@%s[%s]: " RESET, logged_in_user,hostname,short_pwd);
+			//printf("CD BUFFER: %s\n",cd_buffer);
 
+			//TODO --> Real Time History Check
+			//Send all key calls directly to stdin
+			//system("/bin/stty raw");
+			//Send STTY back to normal behavior
+                	//system("/bin/stty cooked");
 
-				//TODO --> Real Time History Check
-				//Send all key calls directly to stdin
-				//system("/bin/stty raw");
-			        //Send STTY back to normal behavior
-                		//system("/bin/stty cooked");
+			fgets(input,64,stdin);
 
-				fgets(input,64,stdin);
-
+		}else if(whoami_allowed == TRUE){
+			printf(YELLOW_TEXT "%s@%s: " RESET, logged_in_user,hostname);
+			fgets(input,64,stdin);
 		}else{
-				printf(YELLOW_TEXT "Command: " RESET);
-				fgets(input,64,stdin);
+			printf(YELLOW_TEXT "Command: " RESET);
+			fgets(input,64,stdin);
 		}
 
 

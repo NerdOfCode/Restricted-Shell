@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -7,8 +6,9 @@ int main( int argc ){
 
         //If argc is greater or equal than 2 do not output pwd
 
+	//Testing if user has correct access to pwd
         if(argc >= 2){
-          return 0;
+        	return 0;
         }
 
         char buffer[64];
