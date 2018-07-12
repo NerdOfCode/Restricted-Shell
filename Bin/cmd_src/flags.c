@@ -1,4 +1,3 @@
-/*
 //Purpose: Designed to show the user any global settings that directly affect them
 //Usage: flags
 
@@ -20,7 +19,3 @@ int main( void ){
 	return 0;
 
 }
-*/
-#include <stdio.h>
-int main(void){
-printf("Command disallowed by admin...\n");return -1;}
