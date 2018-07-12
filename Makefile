@@ -16,6 +16,7 @@ commands:
 	rm -f Bin/hostname~
 	rm -f Bin/time~
 	rm -f Bin/flags~
+	rm -f Bin/history~
 
 	gcc -o Bin/test Bin/cmd_src/test.c 
 	gcc -o Bin/clear Bin/cmd_src/clear.c
@@ -26,3 +27,4 @@ commands:
 	gcc -o Bin/hostname Bin/cmd_src/hostname.c
 	gcc -o Bin/time Bin/cmd_src/time.c
 	gcc -o Bin/flags Bin/cmd_src/flags.c
+	gcc -o Bin/history Bin/cmd_src/history.c

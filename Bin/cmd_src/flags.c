@@ -1,4 +1,3 @@
-/*
 //Purpose: Designed to show the user any global settings that directly affect them
 //Usage: flags
 
@@ -17,10 +16,13 @@ int main( void ){
 	//TODO
 	//Add other global flags as they're added to this shell
 
+
+	//TODO
+	//Show all enabled/disabled commands
+
+	
+
+
 	return 0;
 
 }
-*/
-#include <stdio.h>
-int main(void){
-printf("Command disallowed by admin...\n");return -1;}

@@ -3,10 +3,10 @@
 #######################################################################################
 Author: NerdOfCode
 Purpose: A work in progress shell built in C... Designed to be lightweight and fast...
-Tested on: Ubuntu 16.04
-Status: Working
+Tested on: Ubuntu Server 16.04
+Status: Working --> ^^^
 License: Apache-2.0
-Updated on: 7/2/18
+Updated on: 7/12/18
 #######################################################################################
 
 #########################################################
@@ -132,7 +132,10 @@ int main ( int argc, char argv[64] ){
 		}
 
 
+
+		//Reset testing values
 		memset(pwd_test,0,sizeof(pwd_test));
+		memset(whoami_test,0,sizeof(whoami_test));
 
 		//TODO
 		log_command(input);
@@ -163,6 +166,7 @@ int main ( int argc, char argv[64] ){
 
 	//Start to free dynamically allocated memory
 	free(pwd_test);
+	free(whoami_test);
 	free(logged_in_user);
 	free(hostname);
 
@@ -223,6 +227,7 @@ void commands(){
 	puts("hostname");
 	puts("whoami");
 	puts("flags");
+	puts("history");
         puts("");
 
 }

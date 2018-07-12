@@ -165,6 +165,12 @@ then
 		disallow_c_command "Bin/cmd_src/hostname.c"
 	fi
 
+	read -p "'history'(y/n): " option1
+
+	if [[ "$option1" != "y" ]]
+	then
+		disallow_c_command "Bin/cmd_src/history.c"
+	fi
 
 	touch $config
 fi

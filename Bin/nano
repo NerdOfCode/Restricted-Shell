@@ -3,9 +3,11 @@
 
 rnano_status=$(which rnano)
 
+
+
 if [[ ! -z $rnano_status ]]
 then
-	nano $1
-else
 	rnano $1
+else
+	nano $1
 fi
