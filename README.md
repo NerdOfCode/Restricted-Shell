@@ -6,7 +6,7 @@ To easily setup this amazing restricted shell... Follow the below commands:
 
 First, you need to change to the only working directory right now, and then we can download the repository! You can accomplish such by running: 
 
-***Warning***: Running the below will most likely require "sudo" access!
+***Warning***: Running the below commands may and will most likely require "sudo" access!
 
 ```shell
 cd /etc/ && git clone git@github.com:NerdOfCode/Restricted-Shell.git
@@ -27,5 +27,5 @@ sudo vipw
 USERNAME_HERE:x:1004:1003:,,,:/home/USERNAME_HERE:/etc/Restricted-Shell/run.sh
 ```
 
-Enjoy!!! Oh, and also if anyone is to come across any errors or suggestions, please feel free to send an email to admin@nerdofcode.com!
+Enjoy!!! Oh, and also if anyone is to come across any errors or suggestions, please feel free to send an email to team@nerdofcode.com!
 
