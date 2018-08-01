@@ -9,7 +9,7 @@ First, you need to change to the only working directory right now, and then we c
 ***Warning***: Running the below commands may and will most likely require "sudo" access!
 
 ```shell
-cd /etc/ && git clone git@github.com:NerdOfCode/Restricted-Shell.git
+cd /etc/ && git clone https://github.com/NerdOfCode/Restricted-Shell.git
 ```
 
 Next, you can began the automated setup by running
