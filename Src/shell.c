@@ -6,7 +6,7 @@ Purpose: A work in progress shell built in C... Designed to be lightweight and f
 Tested on: Ubuntu Server 16.04
 Status: Working --> ^^^
 License: Apache-2.0
-Updated on: 7/12/18
+Updated on: 7/31/18
 #######################################################################################
 
 #########################################################
@@ -48,6 +48,8 @@ char *logged_in_user;
 
 bool pwd_allowed = FALSE;
 bool whoami_allowed = FALSE;
+
+int mini_kernel_panic_counter = 0;
 
 int main ( int argc, char argv[64] ){
 
@@ -416,15 +418,24 @@ int log_command(char *command){
 
 	strcat(home_dir_log,logged_in_user);
 
-	strcat(home_dir_log,"/"LOG_FILE);
+	strcat(home_dir_log,"/");
 
-	FILE *fptr = fopen(home_dir_log,"a");
+	strcat(home_dir_log,RSHELL_DIR);
+
+	strcat(home_dir_log, "/");
+
+	strcat(home_dir_log, LOG_FILE);
+
+	FILE *fptr = fopen(home_dir_log,"ab+");
 
         //Protect against errors
         if(fptr == NULL){
-                puts(RED_TEXT"A mini-kernel panic has occurred... Please show the following error to your local admin!"RESET);
-		puts(RED_TEXT"Error 1002"RESET);
-        	return -1;
+                if(mini_kernel_panic_counter < KERNEL_PANIC_MAX_SHOW){
+			puts(RED_TEXT"A mini-kernel panic has occurred... Please show the following error to your local admin!"RESET);
+			puts(RED_TEXT"Error 1002"RESET);
+			mini_kernel_panic_counter++;
+        	}
+			return -1;
 	}
 
         //Print the new dir to our file
@@ -446,3 +457,5 @@ void warn_user( void ){
 	}
 
 }
+
+

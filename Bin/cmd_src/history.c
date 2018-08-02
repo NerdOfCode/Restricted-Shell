@@ -6,13 +6,24 @@
 #include <stdlib.h>
 #include "../../Src/globals.h"
 
-int main(void){
+int main(int argc, char *argv[]){
+
+	int show_max = 0;
+	int ch;
+
+	if(argc < 2){
+		show_max = 9999;
+	}else{
+		show_max = strtol(argv[1], NULL, 0);
+	}
 
 	FILE *fptr;
 
 	char *username;
 	char file[64] = "/home/";
 	char output;
+
+	int display_count = 0;
 
 	username = (char *) malloc(15);
 
@@ -22,7 +33,17 @@ int main(void){
 
 	//Append the log file name to the end
 
-	strcat(file,"/"LOG_FILE);
+	strcat(file, "/");
+
+	strcat(file, RSHELL_DIR);
+
+	strcat(file,"/");
+
+	strcat(file, LOG_FILE);
+
+	if(DEBUG == TRUE){
+		printf("Pulling history from: %s\n",file);
+	}
 
 	//Open file and get some work done
 
@@ -33,15 +54,16 @@ int main(void){
 		exit(-1);
 	}
 
-	output = fgetc(fptr);
+	while((ch = fgetc(fptr)) != EOF  && display_count <= show_max){
 
-	while(output != EOF){
-		printf("%c",output);
-		output = fgetc(fptr);
+		printf("%c",ch);
+
+		display_count++;
 	}
 
-
 	fclose(fptr);
+
+	printf("\n");
 
 	//Free allocated memory
 	//free(username);

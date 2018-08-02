@@ -17,6 +17,7 @@ commands:
 	rm -f Bin/time~
 	rm -f Bin/flags~
 	rm -f Bin/history~
+	rm -f Bin/alias~
 
 	gcc -o Bin/test Bin/cmd_src/test.c 
 	gcc -o Bin/clear Bin/cmd_src/clear.c
@@ -28,3 +29,4 @@ commands:
 	gcc -o Bin/time Bin/cmd_src/time.c
 	gcc -o Bin/flags Bin/cmd_src/flags.c
 	gcc -o Bin/history Bin/cmd_src/history.c
+	gcc -o Bin/alias Bin/cmd_src/alias.c
