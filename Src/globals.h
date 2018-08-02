@@ -2,7 +2,7 @@
 //EDIT
 
 //Used for displaying debug info for specific functions and commands (Experimental)
-#define DEBUG 1
+#define DEBUG 0
 
 //Used for User-command logging
 #define LOGGING 1
@@ -12,6 +12,8 @@
 #define RSHELL_DIR ".r-shell"
 
 #define LOG_FILE "r-shell_history"
+
+#define ALIAS_FILE "r-shell_alias"
 
 //Maximum amount of times to show the mini_kernel panic... 
 //Error Code: 1002
