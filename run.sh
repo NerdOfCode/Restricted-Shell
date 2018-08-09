@@ -3,6 +3,9 @@
 #Author: NerdOfCode
 #Purpose: Easily setup this Restricted-Shell
 
+#Source the global_bash_var file
+source Src/global_bash_var
+
 #Change to 0 to turn auto updates off
 updates=0
 

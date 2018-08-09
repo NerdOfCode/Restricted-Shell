@@ -363,7 +363,8 @@ int parseCommand(char input[64]){
 
 		//Check if command is an alias
 
-		puts("Command not found...");
+		system(filename_ptr);
+
 	}
 
 

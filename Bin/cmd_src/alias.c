@@ -9,9 +9,9 @@
 
 int main( int argc, char *argv[] ){
 
-	puts("Alias is currently being built and is not working...");
-	puts("Sorry for the inconvenience!");
-	exit(0);
+	puts("The alias command is currently a WIP... Sorry...");
+
+	exit(-1);
 
 	if(argc < 2){
 
@@ -20,9 +20,9 @@ int main( int argc, char *argv[] ){
 
 		return -1;
 	}else{
-	
+
 		printf("Creating alias '%s' for command: '%s'\n",argv[1],argv[2]);
-	
+
 	}
 
 	//Define Variables Here
@@ -34,7 +34,7 @@ int main( int argc, char *argv[] ){
 
 	strcat(new_alias, argv[1]);
 
-	strcat(new_alias, " = ");
+	strcat(new_alias, "=");
 
 	strcat(new_alias, argv[2]);
 

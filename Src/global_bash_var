@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#Default location of shell
+#If you are going to change this variable...
+#Please make sure to change the variables in the Src/global.h file
+
+DEFAULT_LOCATION="/etc/Restricted-Shell/"

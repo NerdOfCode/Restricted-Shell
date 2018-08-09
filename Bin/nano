@@ -1,9 +1,27 @@
 #!/bin/bash
 
+#Call the global_bash_var file
+source "/etc/Restricted-Shell/Src/global_bash_var"
+
+#Check if system has dependencies
+
+readlink_status=$(which readlink)
+
+if [[ $? != 0 ]]
+then
+	echo "Error: 2001"
+	exit -1
+fi
+
+path="$(readlink -f $1)"
+
+if [[ "$path" =~ "$DEFAULT_LOCATION"* ]]
+then
+	echo "Nano has been blocked for this file..."
+	exit -1
+fi
 
 rnano_status=$(which rnano)
-
-
 
 if [[ ! -z $rnano_status ]]
 then
