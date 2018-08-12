@@ -30,7 +30,7 @@
 #define RESET "\x1B[0m"
 
 //Default Directory of Shell
-#define DEFAULT_LOCATION "/etc/Restricted-Shell/"
+#define DEFAULT_LOCATION "/etc/Restricted-Shell"
 
 //Default Directory Log file for user
 #define USER_CD_LOG "/etc/Restricted-Shell/Logs/cwd.db"

@@ -6,7 +6,7 @@ Purpose: A work in progress shell built in C... Designed to be lightweight and f
 Tested on: Ubuntu Server 16.04
 Status: Working --> ^^^
 License: Apache-2.0
-Updated on: 7/31/18
+Updated on: 8/12/18
 #######################################################################################
 
 #########################################################
