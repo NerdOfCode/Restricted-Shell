@@ -29,6 +29,9 @@
 //Use 43m for background shading
 #define RESET "\x1B[0m"
 
+//Warning: If you're considering changing the below...
+//Make sure to adjust the Bin/nano file... Thank you!
+
 //Default Directory of Shell
 #define DEFAULT_LOCATION "/etc/Restricted-Shell"
 
