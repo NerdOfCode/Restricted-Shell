@@ -5,3 +5,8 @@
 #Please make sure to change the variables in the Src/global.h file
 
 DEFAULT_LOCATION="/etc/Restricted-Shell/"
+
+#Define colors for color-coating output
+RED_TEXT='\033[0;31m'
+RESET='\033[0m'
+

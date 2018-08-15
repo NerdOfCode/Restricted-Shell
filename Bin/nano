@@ -9,7 +9,7 @@ readlink_status=$(which readlink)
 
 if [[ $? != 0 ]]
 then
-	echo "Error: 2001"
+	echo -e "${RED_TEXT}Error: 2001${RESET}"
 	exit -1
 fi
 
@@ -17,7 +17,7 @@ path="$(readlink -f $1)"
 
 if [[ "$path" =~ "$DEFAULT_LOCATION"* ]]
 then
-	echo "Nano has been blocked for this file..."
+	echo -e "${RED_TEXT}Error: 1004${RESET}"
 	exit -1
 fi
 

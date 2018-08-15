@@ -9,19 +9,18 @@
 int main(int argc, char *argv[]){
 
 	int show_max = 0;
-	int ch;
 
 	if(argc < 2){
+		//Set default lines to show to 9999
 		show_max = 9999;
 	}else{
 		show_max = strtol(argv[1], NULL, 0);
 	}
 
-	FILE *fptr;
-
 	char *username;
 	char file[64] = "/home/";
 	char output;
+	char line[256];
 
 	int display_count = 0;
 
@@ -47,6 +46,7 @@ int main(int argc, char *argv[]){
 
 	//Open file and get some work done
 
+	FILE* fptr; 
 	fptr = fopen(file, "r");
 
 	if(fptr == NULL){
@@ -54,16 +54,15 @@ int main(int argc, char *argv[]){
 		exit(-1);
 	}
 
-	while((ch = fgetc(fptr)) != EOF  && display_count <= show_max){
 
-		printf("%c",ch);
 
-		display_count++;
+	while(fgets(line, sizeof(line), fptr) != NULL && show_max > display_count){
+			display_count += 1;
+			printf("%s", line);
 	}
 
-	fclose(fptr);
 
-	printf("\n");
+	fclose(fptr);
 
 	//Free allocated memory
 	//free(username);
