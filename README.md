@@ -29,3 +29,6 @@ USERNAME_HERE:x:1004:1003:,,,:/home/USERNAME_HERE:/etc/Restricted-Shell/run.sh
 
 Enjoy!!! Oh, and also if anyone is to come across any errors or suggestions, please feel free to send an email to team@nerdofcode.com!
 
+# W.I.P.
+
+1. First, and foremost... We will need to add real time keyboard input in order to allow users to review previous commands...
