@@ -36,8 +36,9 @@
 #define DEFAULT_LOCATION "/etc/Restricted-Shell"
 
 //Default Directory Log file for user
-#define USER_CD_LOG "/etc/Restricted-Shell/Logs/cwd.db"
+#define USER_CD_LOG "CWD"
 
+//The below function has now been automated to users home directory!
 //Where commands are logged to...
 //#define USER_LOG "/etc/Restricted-Shell/Logs/user.log"
 

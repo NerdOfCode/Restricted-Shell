@@ -34,7 +34,23 @@ int main(int argc, char *argv[]){
 }
 
 int write_change(char *copy){
-	FILE *fptr = fopen(USER_CD_LOG,"w");
+	FILE *fptr;
+
+	char cwd_file[64] = "/home/";
+
+	strcat(cwd_file, getlogin());
+
+	strcat(cwd_file, "/");
+
+	strcat(cwd_file, RSHELL_DIR);
+
+	strcat(cwd_file, "/");
+
+	strcat(cwd_file, USER_CD_LOG);
+
+	fopen(cwd_file,"w");
+
+	fptr = fopen(cwd_file, "w");
 
 	//Protect against errors
 	if(fptr == NULL){

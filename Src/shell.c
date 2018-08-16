@@ -188,9 +188,20 @@ void change_to_home_dir( void ){
 void start_up( void ){
 	//Delete any contents from the previous user in logs...
 	FILE *fptr;
-        char buffer[255];
 
-        fptr = fopen(USER_CD_LOG, "w");
+	char home[64] = "/home/";
+
+	strcat(home, getlogin());
+
+	strcat(home, "/");
+
+	strcat(home, RSHELL_DIR);
+
+	strcat(home, "/");
+
+	strcat(home, USER_CD_LOG);
+
+        fptr = fopen(home, "w");
 
 	fclose(fptr);
 
@@ -206,10 +217,21 @@ void clean_up( void ){
 
  	//Delete any contents from the previous user in logs...
         FILE *fptr;
-        char buffer[255];
+
+	char home[64] = "/home/";
+
+	strcat(home, getlogin());
+
+	strcat(home, "/");
+
+	strcat(home, RSHELL_DIR);
+
+	strcat(home, "/");
+
+	strcat(home, USER_CD_LOG);
 
 	//Get rid of users cwd
-        fptr = fopen(USER_CD_LOG, "w");
+        fptr = fopen(home, "w");
         fclose(fptr);
 }
 
@@ -394,8 +416,19 @@ int update_new_cd( int update ){
 	FILE *fptr;
 	char cd_buffer[255] = "";
 	char cwd[1024] = "";
+	char cwd_file[64] = "/home/";
 
-	fptr = fopen(USER_CD_LOG, "r");
+	strcat(cwd_file, getlogin());
+
+	strcat(cwd_file, "/");
+
+	strcat(cwd_file,RSHELL_DIR);
+
+	strcat(cwd_file, "/");
+
+	strcat(cwd_file, USER_CD_LOG);
+
+	fptr = fopen(cwd_file, "r");
 	fscanf(fptr, "%s", cd_buffer);
 	fclose(fptr);
 
@@ -406,7 +439,7 @@ int update_new_cd( int update ){
 			puts("This system is not supported...");
 			exit(1);
 		}
-		truncate(USER_CD_LOG, 0);
+		truncate(cwd_file, 0);
 
 		chdir(cd_buffer);
 		memset(cd_buffer, 0, sizeof(cd_buffer));
