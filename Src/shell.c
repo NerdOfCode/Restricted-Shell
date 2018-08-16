@@ -252,6 +252,8 @@ void commands(){
 	puts("whoami");
 	puts("flags");
 	puts("history");
+	puts("rm");
+	puts("time");
         puts("");
 
 }

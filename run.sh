@@ -175,6 +175,13 @@ then
 		disallow_c_command "Bin/cmd_src/history.c"
 	fi
 
+	read -p "'rm'(y/n): " option1
+
+	if [[ "$option1" != "y" ]]
+	then
+		disallow_c_command "Bin/cmd_src/rm.c"
+	fi
+
 	touch $config
 fi
 
