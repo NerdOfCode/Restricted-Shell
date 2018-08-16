@@ -33,14 +33,14 @@
 //Make sure to adjust the Bin/nano file... Thank you!
 
 //Default Directory of Shell
-#define DEFAULT_LOCATION "/etc/Restricted-Shell"
+#define DEFAULT_LOCATION "/etc/Restricted-Shell/"
 
 //Default Directory Log file for user
 #define USER_CD_LOG "CWD"
 
 //The below function has now been automated to users home directory!
 //Where commands are logged to...
-//#define USER_LOG "/etc/Restricted-Shell/Logs/user.log"
+//#define USER_LOG "nLogs/user.log"
 
 //Default path to command Bin
 #define CMD_BIN "/etc/Restricted-Shell/Bin/"

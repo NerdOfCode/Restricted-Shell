@@ -115,6 +115,17 @@ then
 
 	clear
 
+	read -p "Enter Default Directory for Shell(Default: '/etc/Restricted-Shell/): " location
+
+	if [[ -z $location ]]
+	then
+        	location="/etc/Restricted-Shell/"
+	else
+        	replace "/etc/Restricted-Shell/" "$location" -- Src/global_bash_var
+        	replace "/etc/Restricted-Shell/" "$location" -- Src/globals.h
+		replace "/etc/Restricted-Shell/" "$location" -- run.sh
+	fi
+
 	#Prompt user to allow what commands
 	echo -e "Please choose what commands to allow your users to use below: \n"
 
@@ -184,7 +195,7 @@ then
 
 	touch $config
 fi
-
+ 
 clear
 
 #create_admin_acc
