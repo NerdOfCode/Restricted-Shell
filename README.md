@@ -29,6 +29,14 @@ USERNAME_HERE:x:1004:1003:,,,:/home/USERNAME_HERE:/etc/Restricted-Shell/run.sh
 
 Enjoy!!! Oh, and also if anyone is to come across any errors or suggestions, please feel free to send an email to team@nerdofcode.com!
 
+# Notes
+
+When installing this Restricted-Shell, make sure to be mindful of the permissions you place on this shell's files/directories...
+
+As of right now, I recommend creating and using separate installations for each user... I realize this is a major inconvenience to most, it is the best way to ensure the upmost security of your system.
+
+Good luck :)!
+
 # W.I.P.
 
 1. First, and foremost... We will need to add real time keyboard input in order to allow users to review previous commands...
