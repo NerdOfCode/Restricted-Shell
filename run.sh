@@ -34,6 +34,23 @@ fi
 #Shortcut to make sure all shell scripts are in fact executable
 chmod +x Bin/*
 
+check_commands(){
+
+	exit_status=0
+
+	if [[ ! $(command -v sed) ]]
+	then
+        	echo "Please install 'sed'..."
+		exit_status=1
+	fi
+
+	if [[ $exit_status -eq 1 ]]
+	then
+		exit -1
+	fi
+
+}
+
 check_exec(){
 	if [[ -f Src/shell ]]
 	then
@@ -110,20 +127,22 @@ create_admin_acc(){
 
 clear
 
+check_commands
+
 if [[ ! -f $config ]]
 then
 
 	clear
 
-	read -p "Enter Default Directory for Shell(Default: '/etc/Restricted-Shell/): " location
+	read -p "Enter Default Directory for Shell(Default: '/home/nerdocode/Restricted-Shell/): " location
 
 	if [[ -z $location ]]
 	then
-        	location="/etc/Restricted-Shell/"
+        	location="/home/nerdocode/Restricted-Shell/"
 	else
-        	replace "/etc/Restricted-Shell/" "$location" -- Src/global_bash_var
-        	replace "/etc/Restricted-Shell/" "$location" -- Src/globals.h
-		replace "/etc/Restricted-Shell/" "$location" -- run.sh
+		sed -i "s|/home/nerdocode/Restricted-Shell/|${location}|g" Src/global_bash_var
+		sed -i "s|/home/nerdocode/Restricted-Shell/|${location}|g" Src/globals.h
+		sed -i "s|/home/nerdocode/Restricted-Shell/|${location}|g" run.sh
 	fi
 
 	#Prompt user to allow what commands
@@ -191,6 +210,20 @@ then
 	if [[ "$option1" != "y" ]]
 	then
 		disallow_c_command "Bin/cmd_src/rm.c"
+	fi
+
+	read -p "'mkdir'(y/n): " option1
+
+	if [[ "$option1" != "y" ]]
+	then
+		disallow_c_command "Bin/cmd_src/mkdir.c"
+	fi
+
+	read -p "'rmdir'(y/n): " option1
+
+	if [[ "$option1" != "y" ]]
+	then
+		disallow_c_command "Bin/cmd_src/rmdir.c"
 	fi
 
 	touch $config
