@@ -459,7 +459,7 @@ int update_new_cd( int update ){
 	fclose(fptr);
 
 
-	if(strcmp(cd_buffer,"../") || strcmp(cd_buffer,"..")){
+	if(strncmp(cd_buffer,"../",sizeof("../")) || strncmp(cd_buffer,"..",sizeof("../"))){
 		//Write over file
 		//LINUX SYSTEM DEPENDENT
 		if(HOSTNAME != "USER"){

@@ -41,7 +41,7 @@ int main( int argc, char *argv[] ){
 	//Create the directory to go to for alias file
 
 
-	strcat(alias_home, getlogin());
+	strcat(alias_home, getenv("USER"));
 
 	strcat(alias_home,"/");
 

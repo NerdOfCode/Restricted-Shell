@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include "../../Src/globals.h"
 
 int main(int argc){
@@ -8,7 +9,7 @@ int main(int argc){
 		return 1;
 	}
 
-	char *username = getlogin();
+	char *username = getenv("USER");
 
 	if(username == NULL){
 		puts(RED_TEXT"Error: Unable to Receive Username"RESET);

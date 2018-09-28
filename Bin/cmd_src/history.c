@@ -11,9 +11,15 @@ int main(int argc, char *argv[]){
 	int show_max = 0;
 
 	if(argc < 2){
-		//Set default lines to show to 9999
+		//Set default amount lines to show to 9999
 		show_max = 9999;
 	}else{
+		if(strncmp(argv[1],"--help",sizeof("--help")) == 0){
+			puts("History Help:");
+			puts("	-->Pass a number as an argument to only display n number of lines...");
+			puts("	-->Ex: history 5 --> Displays 5 lines of history");
+			return 0;
+		}
 		show_max = strtol(argv[1], NULL, 0);
 	}
 
@@ -26,7 +32,7 @@ int main(int argc, char *argv[]){
 
 	username = (char *) malloc(15);
 
-	username = getlogin();
+	username = getenv("USER");
 
 	strcat(file,username);
 
