@@ -1,4 +1,5 @@
 # Restricted-Shell
+<img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg">
 A quick and simple shell in C that is designed to be fast and efficient... This shell is in early stages of development...
 
 # Documentation
@@ -6,18 +7,16 @@ To easily setup this amazing restricted shell... Follow the below commands:
 
 First, you need to change to the only working directory right now, and then we can download the repository! You can accomplish such by running: 
 
-***Warning***: Running the below commands may and will most likely require "sudo" access!
-
 ```shell
-cd /etc/ && git clone https://github.com/NerdOfCode/Restricted-Shell.git
+cd ~/ && git clone https://github.com/NerdOfCode/Restricted-Shell.git
 ```
 
 Next, you can began the automated setup by running
 
 ```shell
-cd Restricted-Shell && bash run.sh
+cd Restricted-Shell/ && bash run.sh
 ```
-And Congratulations on setting up this Restricted-Shell!
+And then just answer the questions to the automatic configuration!
 
 If you're interested in using this shell full-time, simply edit the `/etc/passwd` file and change to the following, by running:
 
