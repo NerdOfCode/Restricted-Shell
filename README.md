@@ -1,5 +1,10 @@
 # Restricted-Shell
-<img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg">
+
+| OS | Status |
+|----|--------|
+| Ubuntu 16.04 | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg"> |
+| Ubuntu 18.04 | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg"> |
+
 A quick and simple shell in C that is designed to be fast and efficient... This shell is in early stages of development...
 
 # Documentation
