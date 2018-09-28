@@ -269,7 +269,9 @@ void commands(){
 	puts("history");
 	puts("rm");
 	puts("time");
-        puts("");
+        puts("mkdir");
+	puts("rmdir");
+	puts("");
 
 }
 

@@ -38,7 +38,7 @@ int write_change(char *copy){
 
 	char cwd_file[64] = "/home/";
 
-	strcat(cwd_file, getlogin());
+	strcat(cwd_file, getenv("USER"));
 
 	strcat(cwd_file, "/");
 
