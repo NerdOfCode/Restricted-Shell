@@ -21,14 +21,16 @@ https://github.com/NerdOfCode/Restricted-Shell
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h> //Access
+#include <sys/types.h>
+#include <sys/stat.h>
 #include "globals.h"
 
 //make our own version of 'bool'
 typedef int bool;
 
 //Function Prototypes
-void start_up();
-void clean_up();
+int start_up();
+int clean_up();
 void help_commands();
 void commands();
 void warn_user();
@@ -96,7 +98,7 @@ int main ( int argc, char argv[64] ){
 
 	//Get user and hostname here to eliminate repetitive use!
 	logged_in_user = malloc(64 * sizeof(char));
-	logged_in_user = getlogin();
+	logged_in_user = getenv("USER");
 
 	change_to_home_dir();
 
@@ -185,13 +187,13 @@ void change_to_home_dir( void ){
         chdir(current_user_home);
 }
 
-void start_up( void ){
+int start_up( void ){
 	//Delete any contents from the previous user in logs...
 	FILE *fptr;
 
 	char home[64] = "/home/";
 
-	strcat(home, getlogin());
+	strcat(home, getenv("USER"));
 
 	strcat(home, "/");
 
@@ -199,15 +201,22 @@ void start_up( void ){
 
 	strcat(home, "/");
 
+	//Just to be sure
+	mkdir(home,0755);
+
 	strcat(home, USER_CD_LOG);
 
+	//Overwrite
         fptr = fopen(home, "w");
 
-	fclose(fptr);
-
+	if (fptr == NULL) {
+		return -1;
+	}else{
+		fclose(fptr);
+	}
 }
 
-void clean_up( void ){
+int clean_up( void ){
 
 	printf("Cleaning up...\n");
 	//Reset color values
@@ -220,7 +229,7 @@ void clean_up( void ){
 
 	char home[64] = "/home/";
 
-	strcat(home, getlogin());
+	strcat(home, getenv("USER"));
 
 	strcat(home, "/");
 
@@ -232,7 +241,13 @@ void clean_up( void ){
 
 	//Get rid of users cwd
         fptr = fopen(home, "w");
-        fclose(fptr);
+
+	if(fptr != NULL){
+		fclose(fptr);
+	}else{
+		return -1;
+	}
+
 }
 
 void help_commands(){
@@ -420,7 +435,7 @@ int update_new_cd( int update ){
 	char cwd[1024] = "";
 	char cwd_file[64] = "/home/";
 
-	strcat(cwd_file, getlogin());
+	strcat(cwd_file, getenv("USER"));
 
 	strcat(cwd_file, "/");
 
@@ -431,8 +446,16 @@ int update_new_cd( int update ){
 	strcat(cwd_file, USER_CD_LOG);
 
 	fptr = fopen(cwd_file, "r");
-	fscanf(fptr, "%s", cd_buffer);
+	
+	if(fptr != NULL){
+		fscanf(fptr, "%s", cd_buffer);
+	}else{
+		return -1;
+	}
+
+
 	fclose(fptr);
+
 
 	if(strcmp(cd_buffer,"../") || strcmp(cd_buffer,"..")){
 		//Write over file
