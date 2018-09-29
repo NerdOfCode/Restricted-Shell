@@ -23,6 +23,8 @@ cd Restricted-Shell/ && bash run.sh
 ```
 And then just answer the questions to the automatic configuration!
 
+***Please be aware that the below option is completely experimental and may not be working***
+
 If you're interested in using this shell full-time, simply edit the `/etc/passwd` file and change to the following, by running:
 
 ```shell
