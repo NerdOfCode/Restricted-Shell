@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #Call the global_bash_var file
-source "/etc/Restricted-Shell/Src/global_bash_var"
+location="/etc/Restricted-Shell/"
+source "${location}Src/global_bash_var"
 
 #Check if system has dependencies
 

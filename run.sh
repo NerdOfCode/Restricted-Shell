@@ -146,15 +146,16 @@ then
 
 	clear
 
-	read -p "Enter Default Directory for Shell(Default: '/etc/Restricted-Shell/): " location
+	read -p "Enter Default Directory for Shell(Default: '${DEFAULT_LOCATION}): " location
 
 	if [[ -z $location ]]
 	then
-        	location="/etc/Restricted-Shell/"
+        	location="${DEFAULT_LOCATION}"
 	else
 		sed -i "s|${DEFAULT_LOCATION}|${location}|g" run.sh
 		sed -i "s|${DEFAULT_LOCATION}|${location}|g" Src/globals.h
 		sed -i "s|${DEFAULT_LOCATION}|${location}|g" Src/global_bash_var
+		sed -i "s|${DEFAULT_LOCATION}|${location}|g" Bin/nano
 	fi
 
 	#Prompt user to allow what commands
