@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <limits.h> /* PATH_MAX */
+#include <limits.h> 
 #include "../../Src/globals.h"
 
 int main(int argc, char **argv){

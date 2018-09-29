@@ -1,9 +1,3 @@
-/*
-
-	Gets hostname upon call
-
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "../../Src/globals.h"

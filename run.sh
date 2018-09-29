@@ -146,15 +146,15 @@ then
 
 	clear
 
-	read -p "Enter Default Directory for Shell(Default: '/home/nerdocode/Restricted-Shell/): " location
+	read -p "Enter Default Directory for Shell(Default: '/etc/Restricted-Shell/): " location
 
 	if [[ -z $location ]]
 	then
-        	location="/home/nerdocode/Restricted-Shell/"
+        	location="/etc/Restricted-Shell/"
 	else
-		sed -i "s|/home/nerdocode/Restricted-Shell/|${location}|g" Src/global_bash_var
-		sed -i "s|/home/nerdocode/Restricted-Shell/|${location}|g" Src/globals.h
-		sed -i "s|/home/nerdocode/Restricted-Shell/|${location}|g" run.sh
+		sed -i "s|${DEFAULT_LOCATION}|${location}|g" run.sh
+		sed -i "s|${DEFAULT_LOCATION}|${location}|g" Src/globals.h
+		sed -i "s|${DEFAULT_LOCATION}|${location}|g" Src/global_bash_var
 	fi
 
 	#Prompt user to allow what commands

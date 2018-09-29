@@ -1,5 +1,3 @@
-/* Remove a directory full or not */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

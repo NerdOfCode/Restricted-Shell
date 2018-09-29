@@ -1,10 +1,3 @@
-/*
-
-	Display local time of system
-
-*/
-
-
 #include <stdio.h>
 #include <time.h>
 
