@@ -43,6 +43,18 @@ check_commands(){
         	echo "Please install 'sed'..."
 		exit_status=1
 	fi
+	
+	if [[ ! $(command -v make) ]]
+	then
+		echo "Please install 'make'..."
+		exit_status=1
+	fi
+
+	if [[ ! $(command -v gcc) ]]
+	then
+		echo "Please install 'gcc'..."
+		exit_status=1
+	fi
 
 	if [[ $exit_status -eq 1 ]]
 	then
