@@ -166,18 +166,27 @@ then
 
 	clear
 
-	read -p "Enter Default Directory for Shell(Default: '${DEFAULT_LOCATION}): " location
-
-	if [[ -z $location ]]
-	then
-        	location="${DEFAULT_LOCATION}"
-	else
-		sed -i "s|${DEFAULT_LOCATION}|${location}|g" run.sh
-		sed -i "s|${DEFAULT_LOCATION}|${location}|g" Src/globals.h
-		sed -i "s|${DEFAULT_LOCATION}|${location}|g" Src/global_bash_var
-		sed -i "s|${DEFAULT_LOCATION}|${location}|g" Bin/nano
-	fi
-
+	while true
+	do
+		read -p "Enter Default Directory for Shell(Default: '${DEFAULT_LOCATION}): " location
+		if [[ -z $location ]]
+		then
+        		location="${DEFAULT_LOCATION}"
+			break
+		else
+			read -p "Is this correct: ${location} -- (y/n): " option1
+			if [[ "$option1" == "y"  || "$option1" == "yes" ]]
+			then
+				sed -i "s|${DEFAULT_LOCATION}|${location}|g" run.sh
+				sed -i "s|${DEFAULT_LOCATION}|${location}|g" Src/globals.h
+				sed -i "s|${DEFAULT_LOCATION}|${location}|g" Src/global_bash_var
+				sed -i "s|${DEFAULT_LOCATION}|${location}|g" Bin/nano
+				break
+			else
+				continue
+			fi
+		fi
+	done
 	#Prompt user to allow what commands
 	echo -e "Please choose what commands to allow your users to use below: \n"
 
