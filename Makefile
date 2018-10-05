@@ -19,7 +19,6 @@ commands:
 	rm -f Bin/history~
 	rm -f Bin/alias~
 	rm -f Bin/mkdir~
-	rm -f Bin/rmdir~
 
 	gcc -o Bin/test Bin/cmd_src/test.c 
 	gcc -o Bin/clear Bin/cmd_src/clear.c
@@ -33,4 +32,4 @@ commands:
 	gcc -o Bin/history Bin/cmd_src/history.c
 	gcc -o Bin/alias Bin/cmd_src/alias.c
 	gcc -o Bin/mkdir Bin/cmd_src/mkdir.c
-	gcc -o Bin/rmdir Bin/cmd_src/rmdir.c
+

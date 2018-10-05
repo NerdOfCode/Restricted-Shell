@@ -38,7 +38,7 @@ int main(int argc, char **argv){
 	}
 	
 	if ( remove_status != 0 ){
-
+		//Could be a 1004 error or not
 		puts(RED_TEXT"An error has occurred..."RESET);
 		exit(EXIT_FAILURE);
 

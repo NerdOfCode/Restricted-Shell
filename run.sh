@@ -261,13 +261,6 @@ then
 		disallow_c_command "Bin/cmd_src/mkdir.c"
 	fi
 
-	read -p "'rmdir'(y/n): " option1
-
-	if [[ "$option1" != "y" ]]
-	then
-		disallow_c_command "Bin/cmd_src/rmdir.c"
-	fi
-
 	touch $config
 fi
  

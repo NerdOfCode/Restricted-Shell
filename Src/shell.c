@@ -289,7 +289,6 @@ void commands(){
 	puts("rm");
 	puts("time");
         puts("mkdir");
-	puts("rmdir");
 	puts("");
 
 }
