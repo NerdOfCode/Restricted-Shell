@@ -64,7 +64,7 @@
 //#define USER_LOG "nLogs/user.log"
 
 //Default path to command Bin
-#define CMD_BIN "/home/nerdofcode/Restricted-Shell/Bin/"
+#define CMD_BIN DEFAULT_LOCATION"Bin/"
 
 #define TRUE 1
 #define FALSE 0

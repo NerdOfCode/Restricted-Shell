@@ -34,7 +34,6 @@
 
 */
 
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -42,7 +41,10 @@
 #include <unistd.h> //Access
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
+#include <sys/types.h>
 #include "globals.h"
+
 
 //make our own version of 'bool'
 typedef int bool;
