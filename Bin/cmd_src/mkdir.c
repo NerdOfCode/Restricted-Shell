@@ -30,6 +30,7 @@ int main(int argc, char *argv[]){
 
 	if(ret != 0){
 		printf(RED_TEXT"%s\n"RESET,strerror(errno));
+		return ret;
 	}
 
 	return 0;
