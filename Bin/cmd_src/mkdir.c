@@ -1,12 +1,14 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include "../../Src/globals.h"
 
 int main(int argc, char *argv[]){
 
+	int ret = 0;
 	char buffer[64];
 	char dir[128] = "";
 
@@ -24,7 +26,11 @@ int main(int argc, char *argv[]){
 
 	strcat(dir, argv[1]);
 
-	mkdir(dir, 0755);
+	ret = mkdir(dir, 0755);
+
+	if(ret != 0){
+		printf(RED_TEXT"%s\n"RESET,strerror(errno));
+	}
 
 	return 0;
 
