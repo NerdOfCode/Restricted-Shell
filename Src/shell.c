@@ -17,14 +17,12 @@
 	*under the License.
 
 
-
-
 	#######################################################################################
 	Author: NerdOfCode
 	Tested on: Ubuntu Server 16.04
 	Status: Working --> ^^^
 	License: Apache-2.0
-	Updated on: 9/29/18
+	Updated on: 10/28/18
 	#######################################################################################
 
 	#########################################################
@@ -83,10 +81,10 @@ int main ( int argc, char argv[64] ){
 	//Test if user is allowed to use pwd and if allowed show the working directory
 	//Also test if user is allowed to use hostname and whomai
 	char *pwd_test;
-	int return_pwd_test_value;
+	short int return_pwd_test_value;
 
 	char *whoami_test;
-	int return_whoami_test_value;
+	short int return_whoami_test_value;
 
 	pwd_test = malloc(64 * sizeof(char));
 	strcat(pwd_test,CMD_BIN);
@@ -162,8 +160,8 @@ int main ( int argc, char argv[64] ){
 		memset(pwd_test,0,sizeof(pwd_test));
 		memset(whoami_test,0,sizeof(whoami_test));
 
-		//TODO
-		log_command(input);
+		if(LOGGING)
+			log_command(input);
 
 		//Not a good idea for case specific things, will need to make its own function for better use
 
@@ -203,9 +201,17 @@ void change_to_home_dir( void ){
 	//TODO
         //Create a better method for the following
         //Assume users directory is /home/logged_in_user
+	
+	//For chdir() return code
+	short int return_status = 0;
+
         char current_user_home[64] = "/home/";
         strcat(current_user_home,logged_in_user);
-        chdir(current_user_home);
+        return_status = chdir(current_user_home);
+
+	if(return_status != 0)
+		puts(RED_TEXT"Error: 1005"RESET);
+
 }
 
 int start_up( void ){
@@ -289,9 +295,8 @@ void commands(){
 	puts("flags");
 	puts("history");
 	puts("rm");
-	puts("time");
+	puts("date");
         puts("mkdir");
-	puts("");
 
 }
 

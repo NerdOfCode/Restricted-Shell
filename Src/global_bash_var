@@ -7,7 +7,7 @@
 DEFAULT_LOCATION="/etc/Restricted-Shell/"
 
 #Define last-updated date
-LAST_UPDATED="9/24/18"
+LAST_UPDATED="10/28/18"
 
 #Define colors for color-coating output
 RED_TEXT='\033[0;31m'

@@ -17,16 +17,23 @@
         *specific language governing permissions and limitations
         *under the License.
 
-
+	NerdOfCode Copyrighted 2018
 */
 
-//EDIT BELOW:
+//Value Conventions:
+// 	On v. Off
+//	On --> 1
+//	Off --> 0
+
+#define TRUE 1
+#define FALSE 0
 
 //Used for displaying debug info for specific functions and commands (Experimental)
 #define DEBUG 0
 
 //Used for User-command logging
-#define LOGGING 1
+//Default:0
+#define LOGGING 0
 
 //Used for storing users commands to a specific file in their home directory
 //Such as aliases
@@ -50,9 +57,10 @@
 //Use 43m for background shading
 #define RESET "\x1B[0m"
 
+#define LATEST_VERSION "0.011"
+
 //Warning: If you're considering changing the below...
 //Make sure to adjust the Bin/nano file... Thank you!
-
 //Default Directory of Shell
 #define DEFAULT_LOCATION "/etc/Restricted-Shell/"
 
@@ -66,11 +74,8 @@
 //Default path to command Bin
 #define CMD_BIN DEFAULT_LOCATION"Bin/"
 
-#define TRUE 1
-#define FALSE 0
-
-
 //Platform detection
+//On the wish list for now :)
 #if defined(__linux__)
 	#define HOSTNAME "USER"
 #endif

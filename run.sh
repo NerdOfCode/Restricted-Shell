@@ -180,9 +180,10 @@ then
 				sed -i "s|${DEFAULT_LOCATION}|${location}|g" run.sh
 				sed -i "s|${DEFAULT_LOCATION}|${location}|g" Src/globals.h
 				sed -i "s|${DEFAULT_LOCATION}|${location}|g" Src/global_bash_var
-				sed -i "s|${DEFAULT_LOCATION}|${location}|g" Bin/nano
+				sed -i "s|${DEFAULT_LOCATION}|${location}|g" Bin/cmd_src/nano.sh
 				break
 			else
+				#
 				continue
 			fi
 		fi
