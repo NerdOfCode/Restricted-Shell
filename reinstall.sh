@@ -18,7 +18,7 @@ root_check(){
 
         if [[ "$(whoami)" != "root" ]]
         then
-                echo "This script will most likely need root."
+                echo "Error: Not Root!"
                 echo "Pass '--no-root' if you're willing to risk it."
                 exit -1
         fi

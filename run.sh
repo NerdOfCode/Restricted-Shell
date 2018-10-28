@@ -26,17 +26,11 @@
 #Source the global_bash_var file
 source Src/global_bash_var
 
-#Change to 0 to turn auto updates off
-updates=0
-
+#If file exists, don't prompt user for start-configuration
 config=".config"
 
 #Change to 1 if you don't want to recompile if built
 dont_compile=0
-
-##Where users are stored
-##UNUSED AS OF 7/10/18
-user_db="Logs/users.db"
 
 ##FOR COLOR COATING
 RED='\033[0;41m'
@@ -44,15 +38,38 @@ YELLOW='\e[0;33m'
 
 RESET='\033[0;37m'
 
-
 if [[ "$updates" == "1" ]]
 then
-	echo "Updating repository..."
+ 	echo "Updating repository..."
 	git pull origin master
 fi
 
 #Shortcut to make sure all shell scripts are in fact executable
 chmod +x Bin/*
+
+help(){
+	#If --help flag is thrown
+	echo "Below are the available options:"
+	echo "		--help -> Display this help menu"
+	echo "		--reinstall -> Display reinstallation instructions"
+	echo "		--update -> Update the R-Shell via Git"
+
+	exit 0
+}
+
+reinstall(){
+	#If --reinstall flag is thrown
+	echo "Please run: "
+	echo "		bash reinstall.sh"
+	exit 0
+}
+
+check_updates(){
+	#If --update flag is thrown
+	echo "Attempting to update..."
+	git pull origin master
+	exit 0
+}
 
 check_commands(){
 
@@ -127,37 +144,26 @@ sign_in(){
 	fi
 
 }
-create_admin_acc(){
 
-	sqlite3 $user_db "CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL, password TEXT NOT NULL);"
+#Run through args
 
-	status=$(sqlite3 $user_db "SELECT id FROM users WHERE id=1;")
-	admin_count=$(sqlite3 $user_db "SELECT id FROM users;")
-
-	#echo "Local Admins: ${admin_count: -1}"
-
-	if [ "$status" == "1" ]
+for arg in "$@"
+do
+	if [[ "$arg" == "--help" ]]
 	then
-		echo "You will need to be signed in by an exisiting administrator! "
-		sign_in
+		help
 	fi
 
-	if [[ $add_admin != 0 ]]
+        if [[ "$arg" == "--reinstall" ]]
+        then
+                reinstall
+        fi
+
+	if [[ "$arg" == "--update" ]]
 	then
-		printf "${RED}One More Thing! It is Time to setup the Admin account!\n"
-		printf "Enter the following information!${RESET}\n"
-	
-		read -p "Enter Username: " username
-		read -p "Enter Password: " password
-
-		password="$(echo \"$password\" | sha512sum | awk -F ' ' '{print $1}' )"	
-		echo $password
-		sqlite3 $user_db "INSERT INTO users(username,password) VALUES(\"$username\", \"$password\");"
+		check_updates
 	fi
-
-}
-
-clear
+done
 
 check_commands
 
@@ -266,8 +272,6 @@ then
 fi
  
 clear
-
-#create_admin_acc
 
 check_exec
 
