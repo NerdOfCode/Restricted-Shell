@@ -208,13 +208,15 @@ void change_to_home_dir( void ){
         //Assume users directory is /home/logged_in_user
 
 	//For chdir() return code
-	short int return_status = 0;
+	short int ret = 0;
 
         char current_user_home[64] = "/home/";
         strcat(current_user_home,logged_in_user);
 
 	//chdir() return -1 on error and 0 on success
-	if(chdir(current_user_home) == -1)
+	ret = chdir(current_user_home);
+
+	if(ret == -1)
 		puts(RED_TEXT"Error: 1005"RESET);
 
 }
@@ -487,7 +489,7 @@ int update_new_cd( int update ){
 	fptr = fopen(cwd_file, "r");
 	
 	if(fptr != NULL){
-		if(fscanf(fptr, "%s", cd_buffer) == EOF)
+		if(fscanf(fptr, "%s", cd_buffer) == 0)
 			printf("Error: reading change directory");
 	}else{
 		return -1;
@@ -507,14 +509,12 @@ int update_new_cd( int update ){
 		//Delete old cwd file
 		if(truncate(cwd_file, 0) == -1)
 			printf("Error: unable to overwrite old 'cwd' file.");
-
-		if(chdir(cd_buffer) == -1)
-			puts(RED_TEXT"Error: 1005"RESET);
+		//Pretty much useless for now....
+		short int ret = chdir(cd_buffer);
 		memset(cd_buffer, 0, sizeof(cd_buffer));
 	}else{
 		//We should probably add a security mechanism here at a later date... 4/17/18
-		if(chdir(cd_buffer) == -1)
-			puts(RED_TEXT"Error: 1005"RESET);
+		short int ret = chdir(cd_buffer);
 	}
 
 
