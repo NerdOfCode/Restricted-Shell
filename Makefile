@@ -9,7 +9,7 @@ clean:
 shell:
 	rm -f Src/shell~
 
-	$C -std=gnu11 -o Src/shell Src/shell.c
+	$C -std=gnu11 -O -o Src/shell Src/shell.c
 
 commands:
 

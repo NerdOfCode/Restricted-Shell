@@ -19,8 +19,6 @@
 
 	#######################################################################################
 	Author: NerdOfCode
-	Tested on: Ubuntu Server 16.04
-	Status: Working --> ^^^
 	License: Apache-2.0
 	Updated on: 10/28/18
 	#######################################################################################
@@ -67,10 +65,12 @@ char remove_char_result[128];
 char *home_dir;
 char *logged_in_user;
 
-bool pwd_allowed = FALSE;
-bool whoami_allowed = FALSE;
+struct adv_desc{
+	bool pwd_allowed;
+	bool whoami_allowed;
+} adv_desc_access;
 
-int mini_kernel_panic_counter = 0;
+int mini_kernel_panic_counter;
 
 int main ( int argc, char argv[64] ){
 
@@ -80,11 +80,11 @@ int main ( int argc, char argv[64] ){
 
 	//Test if user is allowed to use pwd and if allowed show the working directory
 	//Also test if user is allowed to use hostname and whomai
-	char *pwd_test;
-	short int return_pwd_test_value;
+	char *pwd_test = "";
+	short int return_pwd_test_value = 0;
 
-	char *whoami_test;
-	short int return_whoami_test_value;
+	char *whoami_test = "";
+	short int return_whoami_test_value = 0;
 
 	pwd_test = malloc(64 * sizeof(char));
 	strcat(pwd_test,CMD_BIN);
@@ -101,17 +101,20 @@ int main ( int argc, char argv[64] ){
 	warn_user();
 
 	if(access(pwd_test,F_OK) == 0){
-		//EXITSTATUS(system(CMD_BIN"pwd"));
 		return_pwd_test_value = system(CMD_BIN"pwd -none");
 		if(WEXITSTATUS(return_pwd_test_value) == 0){
-			pwd_allowed = TRUE;
+			adv_desc_access.pwd_allowed = TRUE;
+		}else if(return_pwd_test_value == -1){
+			puts("Error accessing 'working directory'.");
 		}
 	}
 
 	if(access(whoami_test,F_OK) == 0){
 		return_whoami_test_value = system(CMD_BIN"whoami -none");
 		if(WEXITSTATUS(return_whoami_test_value) == 1){
-			whoami_allowed = TRUE;
+			adv_desc_access.whoami_allowed = TRUE;
+		}else if(return_pwd_test_value == -1){
+			puts("Error accessing 'working directory'.");
 		}
 	}
 
@@ -127,31 +130,33 @@ int main ( int argc, char argv[64] ){
 	start_up();
 
 	while(1){
-		if(pwd_allowed == TRUE && whoami_allowed == TRUE){
+		if(adv_desc_access.pwd_allowed == TRUE && adv_desc_access.whoami_allowed == TRUE){
 			char pwd_buffer[128];
 			char *short_pwd;
 			//Just in case, run a function that changes the dir to the newly written one!
 			update_new_cd(0);
-			getcwd(pwd_buffer, sizeof(pwd_buffer));
+			if(getcwd(pwd_buffer, sizeof(pwd_buffer))==NULL)
+				if(DEBUG)
+					puts("Error getting 'current working directory'.");
 			//Remove all characters up to last one...
 			short_pwd = remove_char_until(pwd_buffer, "/");
 			printf(YELLOW_TEXT "%s@%s[%s]: " RESET, logged_in_user,hostname,short_pwd);
 			//printf("CD BUFFER: %s\n",cd_buffer);
 
-			//TODO --> Real Time History Check
-			//Send all key calls directly to stdin
-			//system("/bin/stty raw");
-			//Send STTY back to normal behavior
-                	//system("/bin/stty cooked");
+			if(fgets(input,64,stdin) == NULL)
+				if(DEBUG)
+					puts("Error retrieving input.");
 
-			fgets(input,64,stdin);
-
-		}else if(whoami_allowed == TRUE){
+		}else if(adv_desc_access.whoami_allowed == TRUE){
 			printf(YELLOW_TEXT "%s@%s: " RESET, logged_in_user,hostname);
-			fgets(input,64,stdin);
+			if(fgets(input,64,stdin) == NULL)
+				if(DEBUG)
+					puts("Error retrieving input.");
 		}else{
 			printf(YELLOW_TEXT "Command: " RESET);
-			fgets(input,64,stdin);
+			if(fgets(input,64,stdin) == NULL)
+				if(DEBUG)
+					puts("Error retrieving input.");
 		}
 
 
@@ -201,15 +206,15 @@ void change_to_home_dir( void ){
 	//TODO
         //Create a better method for the following
         //Assume users directory is /home/logged_in_user
-	
+
 	//For chdir() return code
 	short int return_status = 0;
 
         char current_user_home[64] = "/home/";
         strcat(current_user_home,logged_in_user);
-        return_status = chdir(current_user_home);
 
-	if(return_status != 0)
+	//chdir() return -1 on error and 0 on success
+	if(chdir(current_user_home) == -1)
 		puts(RED_TEXT"Error: 1005"RESET);
 
 }
@@ -417,12 +422,16 @@ int parseCommand(char input[64]){
 		if(input != command_ptr){
 
 			//Reset to default users args
-			memset(filename_ptr, 0, 128);
+			memset(filename_ptr, 0, 64);
 			strcat(filename_ptr, CMD_BIN);
 			strcat(filename_ptr, input);
-			system(filename_ptr);
+			if(system(filename_ptr) == -1)
+				if(DEBUG)
+					printf("Error executing: %s\n",filename_ptr);
 		}else{
-			system(filename_ptr);
+			if(system(filename_ptr) == -1 )
+				if(DEBUG)
+					printf("Error executing: %s\n",filename_ptr);
 		}
 	}else{
 		//TODO
@@ -431,14 +440,17 @@ int parseCommand(char input[64]){
 
 		if(access(filename_ptr, F_OK) == 0){
 
-			system(filename_ptr);
+			if(system(filename_ptr) == -1)
+				if(DEBUG)
+					puts("Error checking alias.");
 		
 		}else{
 		
 			puts(RED_TEXT"Command Not Found!"RESET);
 			if(DEBUG){
 				//Will show the pathway to file
-				system(filename_ptr);
+				//We can safely ignore return value
+				int xyz = system(filename_ptr);
 			}
 		}
 	}
@@ -475,7 +487,8 @@ int update_new_cd( int update ){
 	fptr = fopen(cwd_file, "r");
 	
 	if(fptr != NULL){
-		fscanf(fptr, "%s", cd_buffer);
+		if(fscanf(fptr, "%s", cd_buffer) == EOF)
+			printf("Error: reading change directory");
 	}else{
 		return -1;
 	}
@@ -491,13 +504,17 @@ int update_new_cd( int update ){
 			puts("This system is not supported...");
 			exit(1);
 		}
-		truncate(cwd_file, 0);
+		//Delete old cwd file
+		if(truncate(cwd_file, 0) == -1)
+			printf("Error: unable to overwrite old 'cwd' file.");
 
-		chdir(cd_buffer);
+		if(chdir(cd_buffer) == -1)
+			puts(RED_TEXT"Error: 1005"RESET);
 		memset(cd_buffer, 0, sizeof(cd_buffer));
 	}else{
 		//We should probably add a security mechanism here at a later date... 4/17/18
-		chdir(cd_buffer);
+		if(chdir(cd_buffer) == -1)
+			puts(RED_TEXT"Error: 1005"RESET);
 	}
 
 
