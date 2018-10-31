@@ -29,6 +29,7 @@
 #define FALSE 0
 
 //Used for displaying debug info for specific functions and commands (Experimental)
+//Default:0
 #define DEBUG 0
 
 //Used for User-command logging
@@ -74,8 +75,6 @@
 //Default path to command Bin
 #define CMD_BIN DEFAULT_LOCATION"Bin/"
 
-//Platform detection
-//On the wish list for now :)
 #if defined(__linux__)
 	#define HOSTNAME "USER"
 #endif

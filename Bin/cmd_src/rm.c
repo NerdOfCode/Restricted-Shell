@@ -6,6 +6,11 @@
 
 int main(int argc, char **argv){
 
+	if(argc < 2){
+		puts("rm: [OPT] [FILENAME]");
+		return -1;
+	}
+
 	//Will hold the exit value of the remove() function
 	int remove_status = 0;
 

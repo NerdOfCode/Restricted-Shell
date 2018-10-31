@@ -61,21 +61,18 @@ int update_new_cd();
 int log_command();
 
 //Globals
-char remove_char_result[128];
-char *home_dir;
 char *logged_in_user;
 
-struct adv_desc{
+struct user_access{
 	bool pwd_allowed;
 	bool whoami_allowed;
 } adv_desc_access;
 
-int mini_kernel_panic_counter;
+unsigned int mini_kernel_panic_counter;
 
 int main ( int argc, char argv[64] ){
 
 	char input[64] = "";
-	char *string_compare = "";
 	char *hostname = "";
 
 	//Test if user is allowed to use pwd and if allowed show the working directory
@@ -87,12 +84,12 @@ int main ( int argc, char argv[64] ){
 	short int return_whoami_test_value = 0;
 
 	pwd_test = malloc(64 * sizeof(char));
-	strcat(pwd_test,CMD_BIN);
-	strcat(pwd_test,"pwd");
+	strncat(pwd_test,CMD_BIN, sizeof(CMD_BIN));
+	strncat(pwd_test,"pwd", sizeof(pwd_test));
 
 	whoami_test = malloc(64 * sizeof(char));
-	strcat(whoami_test,CMD_BIN);
-	strcat(whoami_test,"whoami");
+	strncat(whoami_test,CMD_BIN, sizeof(CMD_BIN));
+	strncat(whoami_test,"whoami", sizeof(whoami_test));
 
 	//Run our startup function
 	start_up();
@@ -143,18 +140,18 @@ int main ( int argc, char argv[64] ){
 			printf(YELLOW_TEXT "%s@%s[%s]: " RESET, logged_in_user,hostname,short_pwd);
 			//printf("CD BUFFER: %s\n",cd_buffer);
 
-			if(fgets(input,64,stdin) == NULL)
+			if(fgets(input,sizeof(input),stdin) == NULL)
 				if(DEBUG)
 					puts("Error retrieving input.");
 
 		}else if(adv_desc_access.whoami_allowed == TRUE){
 			printf(YELLOW_TEXT "%s@%s: " RESET, logged_in_user,hostname);
-			if(fgets(input,64,stdin) == NULL)
+			if(fgets(input,sizeof(input),stdin) == NULL)
 				if(DEBUG)
 					puts("Error retrieving input.");
 		}else{
 			printf(YELLOW_TEXT "Command: " RESET);
-			if(fgets(input,64,stdin) == NULL)
+			if(fgets(input,sizeof(input),stdin) == NULL)
 				if(DEBUG)
 					puts("Error retrieving input.");
 		}
@@ -172,14 +169,14 @@ int main ( int argc, char argv[64] ){
 
 		//Check to see if user wants to exit before re-running loop
 		//Have to check for newline too, because of fgets for input
-		if(strncmp(input,"exit\n",sizeof(input)) == 0){
+		if(strncmp(input,"exit\n",sizeof("exit\n")) == 0){
 			clean_up();
 			exit(1);
-		}else if(strncmp(input,"help\n",sizeof(input)) == 0){
+		}else if(strncmp(input,"help\n",sizeof("help\n")) == 0){
 			help_commands();
-		}else if(strncmp(input,"cmds\n",sizeof(input)) == 0){
+		}else if(strncmp(input,"cmds\n",sizeof("cmds\n")) == 0){
 			commands();
-		}else if(strncmp(input," \n",sizeof(input)) == 0){
+		}else if(strncmp(input," \n",sizeof(" \n")) == 0){
 			printf("He - He\n");
 		}else{
 			if(check_empty_beginning(input) <= -1){
@@ -211,7 +208,7 @@ void change_to_home_dir( void ){
 	short int ret = 0;
 
         char current_user_home[64] = "/home/";
-        strcat(current_user_home,logged_in_user);
+        strncat(current_user_home,logged_in_user,sizeof(current_user_home));
 
 	//chdir() return -1 on error and 0 on success
 	ret = chdir(current_user_home);
@@ -227,18 +224,18 @@ int start_up( void ){
 
 	char home[64] = "/home/";
 
-	strcat(home, getenv("USER"));
+	strncat(home, getenv("USER"), sizeof(home));
 
-	strcat(home, "/");
+	strncat(home, "/", sizeof(home));
 
-	strcat(home, RSHELL_DIR);
+	strncat(home, RSHELL_DIR, sizeof(home));
 
-	strcat(home, "/");
+	strncat(home, "/", sizeof(home));
 
 	//Just to be sure
 	mkdir(home,0755);
 
-	strcat(home, USER_CD_LOG);
+	strncat(home, USER_CD_LOG, sizeof(home));
 
 	//Overwrite
         fptr = fopen(home, "w");
@@ -263,15 +260,15 @@ int clean_up( void ){
 
 	char home[64] = "/home/";
 
-	strcat(home, getenv("USER"));
+	strncat(home, getenv("USER"), sizeof(home));
 
-	strcat(home, "/");
+	strncat(home, "/", sizeof(home));
 
-	strcat(home, RSHELL_DIR);
+	strncat(home, RSHELL_DIR, sizeof(home));
 
-	strcat(home, "/");
+	strncat(home, "/", sizeof(home));
 
-	strcat(home, USER_CD_LOG);
+	strncat(home, USER_CD_LOG, sizeof(home));
 
 	//Get rid of users cwd
         fptr = fopen(home, "w");
@@ -310,6 +307,8 @@ void commands(){
 //Basically provide string and char and this will remove everything up to the last occurence of remove_char
 char *remove_char_until(char specified_buffer[128],char remove_char[2]){
 	//Begin removal process below
+
+	static char remove_char_result[128] = "";
 
 	int highest = 0,i = 0;
 
@@ -362,12 +361,12 @@ int parseCommand(char input[64]){
 	//Check for any allocation errors before saving input
 	if(filename_ptr == NULL || command_ptr == NULL){
 		fprintf(stderr, RED_TEXT"Failed to fork... Not enough memory...\n"RESET);
-		return 0;
+		return -1;
 	}
 
 	//Just in case, check for an empty command
 	if(input[0] == '\n'){
-		return 0;
+		return -1;
 	}
 
 	//Prevent user from escaping by running something like: 'ls && exec /bin/bash'
@@ -377,7 +376,7 @@ int parseCommand(char input[64]){
 	for(int i = 0; i <= strlen(input); i++){
 		if(input[i] == '&' || input[i] == '|' || input[i] == ';'){
 				fprintf(stderr,"Illegal character detected...\n");
-				return 0;
+				return -255;
 		}
 	}
 
@@ -397,8 +396,8 @@ int parseCommand(char input[64]){
 	//Obliterate filename_ptr
 	//And check if command exists relative to its filename
 	memset(filename_ptr, 0, sizeof(filename_ptr));
-	strcat(filename_ptr,CMD_BIN);
-	strcat(filename_ptr,command_ptr);
+	strncat(filename_ptr,CMD_BIN, sizeof(CMD_BIN));
+	strncat(filename_ptr,command_ptr, sizeof(CMD_BIN));
 
 	//Only remove newline if command has arguments
 	if(command_args){
@@ -425,8 +424,8 @@ int parseCommand(char input[64]){
 
 			//Reset to default users args
 			memset(filename_ptr, 0, 64);
-			strcat(filename_ptr, CMD_BIN);
-			strcat(filename_ptr, input);
+			strncat(filename_ptr, CMD_BIN, sizeof(CMD_BIN));
+			strncat(filename_ptr, input, sizeof(CMD_BIN));
 			if(system(filename_ptr) == -1)
 				if(DEBUG)
 					printf("Error executing: %s\n",filename_ptr);
@@ -476,15 +475,15 @@ int update_new_cd( int update ){
 	char cwd[1024] = "";
 	char cwd_file[64] = "/home/";
 
-	strcat(cwd_file, getenv("USER"));
+	strncat(cwd_file, getenv("USER"), sizeof(cwd_file));
 
-	strcat(cwd_file, "/");
+	strncat(cwd_file, "/", sizeof(cwd_file));
 
-	strcat(cwd_file,RSHELL_DIR);
+	strncat(cwd_file,RSHELL_DIR, sizeof(cwd_file));
 
-	strcat(cwd_file, "/");
+	strncat(cwd_file, "/", sizeof(cwd_file));
 
-	strcat(cwd_file, USER_CD_LOG);
+	strncat(cwd_file, USER_CD_LOG, sizeof(cwd_file));
 
 	fptr = fopen(cwd_file, "r");
 	
@@ -501,11 +500,7 @@ int update_new_cd( int update ){
 
 	if(strncmp(cd_buffer,"../",sizeof("../")) || strncmp(cd_buffer,"..",sizeof("../"))){
 		//Write over file
-		//LINUX SYSTEM DEPENDENT
-		if(HOSTNAME != "USER"){
-			puts("This system is not supported...");
-			exit(1);
-		}
+
 		//Delete old cwd file
 		if(truncate(cwd_file, 0) == -1)
 			printf("Error: unable to overwrite old 'cwd' file.");
@@ -533,15 +528,15 @@ int log_command(char *command){
 	//Convert Log File to include home directory
 	char home_dir_log[64] = "/home/";
 
-	strcat(home_dir_log,logged_in_user);
+	strncat(home_dir_log,logged_in_user, sizeof(home_dir_log));
 
-	strcat(home_dir_log,"/");
+	strncat(home_dir_log,"/", sizeof(home_dir_log));
 
-	strcat(home_dir_log,RSHELL_DIR);
+	strncat(home_dir_log,RSHELL_DIR, sizeof(home_dir_log));
 
-	strcat(home_dir_log, "/");
+	strncat(home_dir_log, "/", sizeof(home_dir_log));
 
-	strcat(home_dir_log, LOG_FILE);
+	strncat(home_dir_log, LOG_FILE, sizeof(home_dir_log));
 
 	FILE *fptr = fopen(home_dir_log,"ab+");
 
