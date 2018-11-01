@@ -20,7 +20,7 @@
 	#######################################################################################
 	Author: NerdOfCode
 	License: Apache-2.0
-	Updated on: 10/28/18
+	Updated on: 11/1/18
 	#######################################################################################
 
 	#########################################################
@@ -186,7 +186,7 @@ int main ( int argc, char argv[64] ){
 			parseCommand(input);
 		}
 	}
-	//Start the clean up b4 exit
+	//Start the clean up before exit
 	clean_up();
 
 	//Start to free dynamically allocated memory
@@ -208,7 +208,7 @@ void change_to_home_dir( void ){
 	short int ret = 0;
 
         char current_user_home[64] = "/home/";
-        strncat(current_user_home,logged_in_user,sizeof(current_user_home) + sizeof(logged_in_user));
+        strncat(current_user_home,logged_in_user,sizeof(current_user_home));
 
 	//chdir() return -1 on error and 0 on success
 	ret = chdir(current_user_home);
@@ -336,6 +336,7 @@ int check_empty_beginning(char input[64]){
 
 	//We'll hold off if it is only one space...
 	if(input[0] == ' '){
+		//If user puts two spaces before a command... GO ahead and let them know it's not found... 
 		if(input[1] == ' '){
 				puts("Command not found...");
 				return -2;
@@ -347,19 +348,19 @@ int check_empty_beginning(char input[64]){
 
 int parseCommand(char input[64]){
 
-	char *filename_ptr;
-	char *command_ptr;
+	char *pfilename;
+	char *pcommand;
 	bool command_args = FALSE;
 	int command_status = 0;
 
-	//The command_ptr is for the user input but without any arguments attached
+	//The pcommand is for the user input but without any arguments attached
 
 	//Dynamic memory  allocation
-	filename_ptr = malloc(64 * sizeof(char));
-	command_ptr = malloc(64 * sizeof(char));
+	pfilename = malloc(64 * sizeof(char));
+	pcommand = malloc(64 * sizeof(char));
 
 	//Check for any allocation errors before saving input
-	if(filename_ptr == NULL || command_ptr == NULL){
+	if(pfilename == NULL || pcommand == NULL){
 		fprintf(stderr, RED_TEXT"Failed to fork... Not enough memory...\n"RESET);
 		return -1;
 	}
@@ -383,7 +384,7 @@ int parseCommand(char input[64]){
 	//Remove all arguments
 	for(int i = 0; i <= strlen(input); ++i){
 		if(input[i] != ' '){
-			command_ptr[i] = input[i];
+			pcommand[i] = input[i];
 			command_args = TRUE;
 		}else{
 			command_args = FALSE;
@@ -392,52 +393,52 @@ int parseCommand(char input[64]){
 
 	}
 
-	//Obliterate filename_ptr
+	//Obliterate pfilename
 	//And check if command exists relative to its filename
-	memset(filename_ptr, 0, sizeof(filename_ptr));
-	strncat(filename_ptr,CMD_BIN, sizeof(CMD_BIN) + sizeof(filename_ptr));
-	strncat(filename_ptr,command_ptr, sizeof(filename_ptr) + sizeof(command_ptr));
+	memset(pfilename, 0, sizeof(pfilename));
+	strncat(pfilename,CMD_BIN, sizeof(CMD_BIN) + sizeof(pfilename));
+	strncat(pfilename,pcommand, sizeof(pfilename) + sizeof(pcommand));
 
 	//Only remove newline if command has arguments
 	if(command_args){
-		filename_ptr[strlen(filename_ptr)-1] = '\0';
+		pfilename[strlen(pfilename)-1] = '\0';
 	}
 
-        command_ptr[strlen(command_ptr)-1] = '\0';
+        pcommand[strlen(pcommand)-1] = '\0';
         input[strlen(input)-1] = '\0';
 
 	//TEMPORARY FIX!!! 4/20/18
         //SPECIAL CASE: If command is cd, give a heads up to update the cwd
-        if(strncmp(command_ptr,"c", sizeof(command_ptr)) == 0){
+        if(strncmp(pcommand,"c", sizeof(pcommand)) == 0){
                 update_new_cd(1);
         }
 
 	//If command or rather file is found, proceed
-	if(access(filename_ptr, F_OK) == 0){
+	if(access(pfilename, F_OK) == 0){
 		//Since the command exists we can try running the arguments the user has provided
 		//Check if args and no args are different
-		if(input != command_ptr){
+		if(input != pcommand){
 
 			//Reset to default users args
-			memset(filename_ptr, 0, 64);
-			strncat(filename_ptr, CMD_BIN, sizeof(CMD_BIN) + sizeof(filename_ptr));
-			strncat(filename_ptr, input, sizeof(CMD_BIN) + sizeof(filename_ptr));
-			if(system(filename_ptr) == -1)
+			memset(pfilename, 0, 64);
+			strncat(pfilename, CMD_BIN, sizeof(CMD_BIN) + sizeof(pfilename));
+			strncat(pfilename, input, sizeof(CMD_BIN) + sizeof(pfilename));
+			if(system(pfilename) == -1)
 				if(DEBUG)
-					printf("Error executing: %s\n",filename_ptr);
+					printf("Error executing: %s\n",pfilename);
 		}else{
-			if(system(filename_ptr) == -1 )
+			if(system(pfilename) == -1 )
 				if(DEBUG)
-					printf("Error executing: %s\n",filename_ptr);
+					printf("Error executing: %s\n",pfilename);
 		}
 	}else{
 		//TODO
 
 		//Check if command is an alias
 
-		if(access(filename_ptr, F_OK) == 0){
+		if(access(pfilename, F_OK) == 0){
 
-			if(system(filename_ptr) == -1)
+			if(system(pfilename) == -1)
 				if(DEBUG)
 					puts("Error checking alias.");
 		
@@ -447,7 +448,7 @@ int parseCommand(char input[64]){
 			if(DEBUG){
 				//Will show the pathway to file
 				//We can safely ignore return value
-				int xyz = system(filename_ptr);
+				int xyz = system(pfilename);
 			}
 		}
 	}
@@ -455,8 +456,8 @@ int parseCommand(char input[64]){
 
 	//Reset variables
 	command_args = FALSE;
-	memset(filename_ptr, 0, sizeof(filename_ptr));
-	memset(command_ptr, 0, sizeof(command_ptr));
+	memset(pfilename, 0, sizeof(pfilename));
+	memset(pcommand, 0, sizeof(pcommand));
 	memset(input, 0, 64);
 
 	return 0;
@@ -550,6 +551,7 @@ int log_command(char *command){
         fprintf(fptr,"%s",command);
         fclose(fptr);
 }
+
 
 //Basically give the user a heads up that the admin is using logging tools and whatnot
 //Also, since this function is most likely going to be run when the shell is activated, 
