@@ -84,11 +84,11 @@ int main ( int argc, char argv[64] ){
 	short int return_whoami_test_value = 0;
 
 	pwd_test = malloc(64 * sizeof(char));
-	strncat(pwd_test,CMD_BIN, sizeof(CMD_BIN));
+	strncat(pwd_test,CMD_BIN, sizeof(CMD_BIN) + sizeof(pwd_test));
 	strncat(pwd_test,"pwd", sizeof(pwd_test));
 
 	whoami_test = malloc(64 * sizeof(char));
-	strncat(whoami_test,CMD_BIN, sizeof(CMD_BIN));
+	strncat(whoami_test,CMD_BIN, sizeof(CMD_BIN) + sizeof(whoami_test));
 	strncat(whoami_test,"whoami", sizeof(whoami_test));
 
 	//Run our startup function
@@ -208,7 +208,7 @@ void change_to_home_dir( void ){
 	short int ret = 0;
 
         char current_user_home[64] = "/home/";
-        strncat(current_user_home,logged_in_user,sizeof(current_user_home));
+        strncat(current_user_home,logged_in_user,sizeof(current_user_home) + sizeof(logged_in_user));
 
 	//chdir() return -1 on error and 0 on success
 	ret = chdir(current_user_home);
@@ -380,7 +380,6 @@ int parseCommand(char input[64]){
 		}
 	}
 
-
 	//Remove all arguments
 	for(int i = 0; i <= strlen(input); ++i){
 		if(input[i] != ' '){
@@ -396,14 +395,13 @@ int parseCommand(char input[64]){
 	//Obliterate filename_ptr
 	//And check if command exists relative to its filename
 	memset(filename_ptr, 0, sizeof(filename_ptr));
-	strncat(filename_ptr,CMD_BIN, sizeof(CMD_BIN));
-	strncat(filename_ptr,command_ptr, sizeof(CMD_BIN));
+	strncat(filename_ptr,CMD_BIN, sizeof(CMD_BIN) + sizeof(filename_ptr));
+	strncat(filename_ptr,command_ptr, sizeof(filename_ptr) + sizeof(command_ptr));
 
 	//Only remove newline if command has arguments
 	if(command_args){
 		filename_ptr[strlen(filename_ptr)-1] = '\0';
 	}
-
 
         command_ptr[strlen(command_ptr)-1] = '\0';
         input[strlen(input)-1] = '\0';
@@ -414,8 +412,6 @@ int parseCommand(char input[64]){
                 update_new_cd(1);
         }
 
-
-
 	//If command or rather file is found, proceed
 	if(access(filename_ptr, F_OK) == 0){
 		//Since the command exists we can try running the arguments the user has provided
@@ -424,8 +420,8 @@ int parseCommand(char input[64]){
 
 			//Reset to default users args
 			memset(filename_ptr, 0, 64);
-			strncat(filename_ptr, CMD_BIN, sizeof(CMD_BIN));
-			strncat(filename_ptr, input, sizeof(CMD_BIN));
+			strncat(filename_ptr, CMD_BIN, sizeof(CMD_BIN) + sizeof(filename_ptr));
+			strncat(filename_ptr, input, sizeof(CMD_BIN) + sizeof(filename_ptr));
 			if(system(filename_ptr) == -1)
 				if(DEBUG)
 					printf("Error executing: %s\n",filename_ptr);
