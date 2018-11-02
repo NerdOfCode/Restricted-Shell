@@ -58,7 +58,7 @@
 //Use 43m for background shading
 #define RESET "\x1B[0m"
 
-#define LATEST_VERSION "0.011"
+#define LATEST_VERSION "0.020"
 
 //Warning: If you're considering changing the below...
 //Make sure to adjust the Bin/nano file... Thank you!

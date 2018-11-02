@@ -14,6 +14,13 @@ then
 	exit -1
 fi
 
+#Check how many args
+if [[ $# -lt 1 ]]
+then
+	echo "Formatting: nano test.sh"
+	exit -1
+fi
+
 path="$(readlink -f $1)"
 
 if [[ "$path" =~ "$DEFAULT_LOCATION"* ]]

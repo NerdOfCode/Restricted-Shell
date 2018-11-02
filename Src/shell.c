@@ -39,6 +39,8 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "globals.h"
 
 
@@ -72,7 +74,8 @@ unsigned int mini_kernel_panic_counter;
 
 int main ( int argc, char argv[64] ){
 
-	char input[64] = "";
+	char input[256] = "";
+	char *pinput = "";
 	char *hostname = "";
 
 	//Test if user is allowed to use pwd and if allowed show the working directory
@@ -137,12 +140,13 @@ int main ( int argc, char argv[64] ){
 					puts("Error getting 'current working directory'.");
 			//Remove all characters up to last one...
 			short_pwd = remove_char_until(pwd_buffer, "/");
-			printf(YELLOW_TEXT "%s@%s[%s]: " RESET, logged_in_user,hostname,short_pwd);
-			//printf("CD BUFFER: %s\n",cd_buffer);
-
-			if(fgets(input,sizeof(input),stdin) == NULL)
-				if(DEBUG)
-					puts("Error retrieving input.");
+			printf(YELLOW_TEXT "%s@%s[%s] " RESET, logged_in_user,hostname,short_pwd);
+			pinput = readline("->");
+			add_history(pinput);
+			strncpy(input, pinput, 64);
+//			if(fgets(input,sizeof(input),stdin) == NULL)
+//				if(DEBUG)
+//					puts("Error retrieving input.");
 
 		}else if(adv_desc_access.whoami_allowed == TRUE){
 			printf(YELLOW_TEXT "%s@%s: " RESET, logged_in_user,hostname);
@@ -169,14 +173,14 @@ int main ( int argc, char argv[64] ){
 
 		//Check to see if user wants to exit before re-running loop
 		//Have to check for newline too, because of fgets for input
-		if(strncmp(input,"exit\n",sizeof("exit\n")) == 0){
+		if(strncmp(input,"exit",sizeof("exit")) == 0){
 			clean_up();
 			exit(1);
-		}else if(strncmp(input,"help\n",sizeof("help\n")) == 0){
+		}else if(strncmp(input,"help",sizeof("help")) == 0){
 			help_commands();
-		}else if(strncmp(input,"cmds\n",sizeof("cmds\n")) == 0){
+		}else if(strncmp(input,"cmds",sizeof("cmds")) == 0){
 			commands();
-		}else if(strncmp(input," \n",sizeof(" \n")) == 0){
+		}else if(strncmp(input," ",sizeof(" ")) == 0){
 			printf("He - He\n");
 		}else{
 			if(check_empty_beginning(input) <= -1){
@@ -329,7 +333,7 @@ char *remove_char_until(char specified_buffer[128],char remove_char[2]){
 	return remove_char_result;
 }
 
-int check_empty_beginning(char input[64]){
+int check_empty_beginning(char input[256]){
 	//0 --> No space at beggining
 	//-1 --> A single space at index 0
 	//-2 --> Two spaces at beggining
@@ -346,18 +350,18 @@ int check_empty_beginning(char input[64]){
 	}
 }
 
-int parseCommand(char input[64]){
+int parseCommand(char input[256]){
 
-	char *pfilename;
-	char *pcommand;
+	char *pfilename = "";
+	char *pcommand = "" ;
 	bool command_args = FALSE;
 	int command_status = 0;
 
 	//The pcommand is for the user input but without any arguments attached
 
 	//Dynamic memory  allocation
-	pfilename = malloc(64 * sizeof(char));
-	pcommand = malloc(64 * sizeof(char));
+	pfilename = malloc(256 * sizeof(char));
+	pcommand = malloc(256 * sizeof(char));
 
 	//Check for any allocation errors before saving input
 	if(pfilename == NULL || pcommand == NULL){
@@ -366,7 +370,7 @@ int parseCommand(char input[64]){
 	}
 
 	//Just in case, check for an empty command
-	if(input[0] == '\n'){
+	if(input[0] == '\0'){
 		return -1;
 	}
 
@@ -384,32 +388,31 @@ int parseCommand(char input[64]){
 	//Remove all arguments
 	for(int i = 0; i <= strlen(input); ++i){
 		if(input[i] != ' '){
+			//Delete args
 			pcommand[i] = input[i];
-			command_args = TRUE;
-		}else{
+			pcommand[i+1] = '\0';
 			command_args = FALSE;
+		}else{
+			command_args = TRUE;
+			pcommand[i+1] = '\0';
 			break;
 		}
-
 	}
+	
+
+	if(DEBUG)
+		printf("command_args: %s\n",command_args ? "False" : "True");
 
 	//Obliterate pfilename
 	//And check if command exists relative to its filename
+	//Convert pcommand into pfilename with absolute path
 	memset(pfilename, 0, sizeof(pfilename));
 	strncat(pfilename,CMD_BIN, sizeof(CMD_BIN) + sizeof(pfilename));
 	strncat(pfilename,pcommand, sizeof(pfilename) + sizeof(pcommand));
 
-	//Only remove newline if command has arguments
-	if(command_args){
-		pfilename[strlen(pfilename)-1] = '\0';
-	}
-
-        pcommand[strlen(pcommand)-1] = '\0';
-        input[strlen(input)-1] = '\0';
-
 	//TEMPORARY FIX!!! 4/20/18
         //SPECIAL CASE: If command is cd, give a heads up to update the cwd
-        if(strncmp(pcommand,"c", sizeof(pcommand)) == 0){
+        if(strncmp(pcommand,"cd", sizeof(pcommand)) == 0){
                 update_new_cd(1);
         }
 
@@ -417,40 +420,32 @@ int parseCommand(char input[64]){
 	if(access(pfilename, F_OK) == 0){
 		//Since the command exists we can try running the arguments the user has provided
 		//Check if args and no args are different
-		if(input != pcommand){
-
+		if(strncmp(input, pcommand, sizeof(pcommand)) != 0){
+			//ARGS
 			//Reset to default users args
-			memset(pfilename, 0, 64);
+			memset(pfilename, 0, 256);
 			strncat(pfilename, CMD_BIN, sizeof(CMD_BIN) + sizeof(pfilename));
 			strncat(pfilename, input, sizeof(CMD_BIN) + sizeof(pfilename));
+
 			if(system(pfilename) == -1)
 				if(DEBUG)
 					printf("Error executing: %s\n",pfilename);
 		}else{
+			//NO ARGS
 			if(system(pfilename) == -1 )
 				if(DEBUG)
 					printf("Error executing: %s\n",pfilename);
 		}
 	}else{
-		//TODO
+			//Could not find file
 
-		//Check if command is an alias
-
-		if(access(pfilename, F_OK) == 0){
-
-			if(system(pfilename) == -1)
-				if(DEBUG)
-					puts("Error checking alias.");
-		
-		}else{
-		
 			puts(RED_TEXT"Command Not Found!"RESET);
 			if(DEBUG){
 				//Will show the pathway to file
 				//We can safely ignore return value
-				int xyz = system(pfilename);
+				int ignore_me = system(pfilename);
 			}
-		}
+		//}
 	}
 
 
@@ -508,15 +503,6 @@ int update_new_cd( int update ){
 		//We should probably add a security mechanism here at a later date... 4/17/18
 		short int ret = chdir(cd_buffer);
 	}
-
-
-	/*
-   	if(getcwd(cwd, sizeof(cwd)) != NULL){
-       		printf("Current working dir: %s\n", cwd);
-   	}else{
-		fprintf(stderr, "cwd() error");
-	}
-	*/
 
 	return 0;
 }

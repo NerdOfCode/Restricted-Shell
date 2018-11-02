@@ -12,7 +12,7 @@ void audit_dir();
 
 int main(int argc, char *argv[]){
 
-	int result;
+	int result = 0;
 	char *copy = argv[1];
 
 	if( argc > 1 ){
