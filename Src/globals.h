@@ -21,7 +21,6 @@
 */
 
 //Value Conventions:
-// 	On v. Off
 //	On --> 1
 //	Off --> 0
 
@@ -48,29 +47,20 @@
 //Error Code: 1002
 #define KERNEL_PANIC_MAX_SHOW 3
 
-//Only Edit Below If You Can Afford To Break Things
-/*****************************/
-
 //Color Constants
 #define RED_TEXT "\033[1;31m"
 #define YELLOW_TEXT "\x1B[33m"
-
-//Use 43m for background shading
 #define RESET "\x1B[0m"
 
 #define LATEST_VERSION "0.020"
 
 //Warning: If you're considering changing the below...
-//Make sure to adjust the Bin/nano file... Thank you!
+//Make sure to adjust the Bin/cmd_src/nano...
 //Default Directory of Shell
 #define DEFAULT_LOCATION "/etc/Restricted-Shell/"
 
 //Default Directory Log file for user
 #define USER_CD_LOG "CWD"
-
-//The below function has now been automated to users home directory!
-//Where commands are logged to...
-//#define USER_LOG "nLogs/user.log"
 
 //Default path to command Bin
 #define CMD_BIN DEFAULT_LOCATION"Bin/"

@@ -140,13 +140,12 @@ int main ( int argc, char argv[64] ){
 					puts("Error getting 'current working directory'.");
 			//Remove all characters up to last one...
 			short_pwd = remove_char_until(pwd_buffer, "/");
+
 			printf(YELLOW_TEXT "%s@%s[%s] " RESET, logged_in_user,hostname,short_pwd);
 			pinput = readline("->");
-			add_history(pinput);
+
+//			add_history(pinput);
 			strncpy(input, pinput, 64);
-//			if(fgets(input,sizeof(input),stdin) == NULL)
-//				if(DEBUG)
-//					puts("Error retrieving input.");
 
 		}else if(adv_desc_access.whoami_allowed == TRUE){
 			printf(YELLOW_TEXT "%s@%s: " RESET, logged_in_user,hostname);
@@ -342,7 +341,7 @@ int check_empty_beginning(char input[256]){
 	if(input[0] == ' '){
 		//If user puts two spaces before a command... GO ahead and let them know it's not found... 
 		if(input[1] == ' '){
-				puts("Command not found...");
+				puts("Command not found...\a");
 				return -2;
 		}
 	}else{
@@ -439,7 +438,7 @@ int parseCommand(char input[256]){
 	}else{
 			//Could not find file
 
-			puts(RED_TEXT"Command Not Found!"RESET);
+			puts(RED_TEXT"Command Not Found!\a"RESET);
 			if(DEBUG){
 				//Will show the pathway to file
 				//We can safely ignore return value

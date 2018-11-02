@@ -208,7 +208,7 @@ then
 	
 	if [[ "$option1" != "y" ]]
 	then
-		disallow_shell_command "Bin/nano"
+		disallow_shell_command "Bin/cmd_src/nano.sh"
 	fi
 
 	read -p "'pwd'(y/n): " option1
