@@ -40,8 +40,10 @@ If you're interested in using this shell full-time, simply edit the `/etc/passwd
 ```shell
 sudo vipw 
 
-USERNAME_HERE:x:1004:1003:,,,:/home/USERNAME_HERE:/etc/Restricted-Shell/run.sh
+USERNAME_HERE:x:1004:1003:,,,:/home/USERNAME_HERE:/home/USER_HERE/Restricted-Shell/shell
 ```
+
+After performing the above, make sure to first run `run.sh` to customize your shell... Then feel free, to logout and back in, to see the changes!
 
 Enjoy!!! Oh, and also if anyone is to come across any errors or suggestions, please feel free to send an email to team@nerdofcode.com!
 
