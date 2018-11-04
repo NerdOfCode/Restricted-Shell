@@ -64,6 +64,18 @@ reinstall(){
 	exit 0
 }
 
+check_dependency(){
+	eval $1
+	if [[ $? -ne 0 ]]
+	then
+		#Tell the whole script that we have a dependency problem
+		dependency_exit=1
+		echo "$2"
+		exit -1
+	fi
+
+}
+
 check_updates(){
 	#If --update flag is thrown
 	echo "Attempting to update..."
@@ -74,6 +86,12 @@ check_updates(){
 check_commands(){
 
 	exit_status=0
+
+	if [[ ! $(command -v readlink) ]]
+	then
+		echo "Please install 'readlink'..."
+		exit_status=1
+	fi
 
 	if [[ ! $(command -v sed) ]]
 	then
@@ -174,6 +192,15 @@ then
 
 	while true
 	do
+		#Check if required dependency's are installed
+		
+		#Check build-essential
+		check_dependency "dpkg -l build-essential >/dev/null 2>&1" "Please install 'build-essential'."
+		#Check libreadline-dev
+		check_dependency "dpkg -l libreadline-dev >/dev/null 2>&1" "Please install 'libreadline-dev'."
+
+		if [[ $dependency_problem -ne 0  ]]; then exit -1; fi
+
 		read -p "Enter Default Directory for Shell(Default: '${DEFAULT_LOCATION}): " location
 		if [[ -z $location ]]
 		then
@@ -205,7 +232,7 @@ then
 	fi
 
 	read -p "'nano'(y/n): " option1
-	
+
 	if [[ "$option1" != "y" ]]
 	then
 		disallow_shell_command "Bin/cmd_src/nano.sh"
