@@ -48,7 +48,9 @@ int write_change(char *copy){
 
 	strcat(cwd_file, USER_CD_LOG);
 
-	fopen(cwd_file,"w");
+	if(fopen(cwd_file,"w")==NULL){
+		puts(RED_TEXT"Could not get cached directory!"RESET);
+	}
 
 	fptr = fopen(cwd_file, "w");
 
@@ -70,9 +72,9 @@ int write_change(char *copy){
 	return 0;
 }
 
+// *dir => Relative Directory Name
 void audit_dir(char *dir){
-
-	if(strstr(dir,DEFAULT_LOCATION) != NULL){
+	if(strstr(DEFAULT_LOCATION,dir) != NULL){
 		puts(RED_TEXT"Access Denied: 1004"RESET);
 		exit(-1);
 	}

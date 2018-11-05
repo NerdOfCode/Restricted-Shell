@@ -1,4 +1,4 @@
-C=	gcc
+C=	gcc -std=gnu11 -O
 
 all: clean shell commands clone_bash
 
@@ -9,7 +9,7 @@ clean:
 shell:
 	rm -f Src/shell~
 
-	$C -std=gnu11 -O -o Src/shell Src/shell.c -lreadline
+	$C -o Src/shell Src/shell.c -lreadline
 
 commands:
 
@@ -26,6 +26,7 @@ commands:
 	$C -o Bin/alias Bin/cmd_src/alias.c
 	$C -o Bin/mkdir Bin/cmd_src/mkdir.c
 	$C -o Bin/version Bin/cmd_src/version.c
+	$C -o Bin/cat Bin/cmd_src/cat.c
 
 clone_bash:
 	cp -f Bin/cmd_src/ls.sh Bin/ls

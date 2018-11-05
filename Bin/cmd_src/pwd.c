@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "../../Src/globals.h"
 
 int main( int argc ){
 
@@ -13,7 +14,10 @@ int main( int argc ){
 
         char buffer[64];
 
-        getcwd(buffer,64);
+        if(getcwd(buffer,64) == NULL){
+		puts(RED_TEXT"Unable to get directory!"RESET);
+		return -1;
+	}
 
         printf("%s\n",buffer);
 

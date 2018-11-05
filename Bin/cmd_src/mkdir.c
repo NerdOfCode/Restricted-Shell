@@ -18,7 +18,9 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
-        getcwd(buffer,64);
+        if(getcwd(buffer,64)==NULL){
+		puts(RED_TEXT"Could not get directory!"RESET);
+	}
 
 	strcat(dir,buffer);
 
