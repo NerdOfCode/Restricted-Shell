@@ -4,7 +4,7 @@
 #If you are going to change this variable...
 #Please make sure to change the variables in the Src/global.h file
 
-DEFAULT_LOCATION="/etc/Restricted-Shell/"
+DEFAULT_LOCATION="/home/nerdofcode/Restricted-Shell/"
 
 #Define last-updated date
 LAST_UPDATED="10/28/18"
