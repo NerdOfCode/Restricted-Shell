@@ -1,5 +1,4 @@
 #!/bin/bash 
-
 : '
          This file is part of the Restricted-Shell distribution (https://github.com/NerdOfCode/Restricted-Shell).
          Copyright (c) 2018 NerdOfCode.
@@ -28,6 +27,9 @@ config=".config"
 #Change to 1 if you don't want to recompile if built
 dont_compile=0
 
+#Assume user doesen't want to disable readline functionality if they dont pass --disable-readline
+disable_readline=0
+
 ##FOR COLOR COATING
 RED='\033[0;41m'
 YELLOW='\e[0;33m'
@@ -46,9 +48,13 @@ chmod +x Bin/*
 help(){
 	#If --help flag is thrown
 	echo "Below are the available options:"
-	echo "		--help -> Display this help menu"
-	echo "		--reinstall -> Display reinstallation instructions"
-	echo "		--update -> Update the R-Shell via Git"
+	echo "    --help -> Display this help menu"
+	echo ""
+	echo "    --disable-readline -> disable readline functionality... Useful if dependency not installed."
+	echo "    --enable-readline -> used to enable readline functionality after being disabled."
+	echo ""
+	echo "    --reinstall -> Display reinstallation instructions"
+	echo "    --update -> Update the R-Shell via Git"
 
 	exit 0
 }
@@ -140,27 +146,8 @@ disallow_c_command(){
         echo "int main(void){" >> $1
         echo "printf(\"Command disallowed by admin...\n\");return -1;}" >> $1
 }
-sign_in(){
-	read -p "Enter Username: " USERNAME
-	read -p "Enter Password: " PASSWORD
-	PASSWORD="$(echo \"$PASSWORD\" | sha512sum | awk -F ' ' '{print $1}' )"
-
-	#verify
-	verify=$(sqlite3 $user_db "SELECT id FROM users WHERE password=\"$PASSWORD\";")
-
-	if [[ ! -z "$verify" ]]
-	then
-		printf "${YELLOW}Welcome, user: $verify${RESET}\n"
-		add_admin=0
-	else
-		printf "${RED}Authentication Failed!${RESET}\n"
-		exit -1
-	fi
-
-}
 
 #Run through args
-
 for arg in "$@"
 do
 	if [[ "$arg" == "--help" ]]
@@ -168,6 +155,20 @@ do
 		help
 	fi
 
+	if [[ "$arg" == "--disable-readline" ]]
+	then
+	    sed -i 's/ENABLED_READLINE ./ENABLED_READLINE 0/g' Src/globals.h
+	    sed -i 's/libs_for_gcc=.*/libs_for_gcc=/g' Makefile
+	    disable_readline=1
+	fi
+
+	if [[ "$arg" == "--enable-readline" ]]
+	then
+	    sed -i 's/ENABLED_READLINE ./ENABLED_READLINE 1/g' Src/globals.h
+            sed -i 's/libs_for_gcc=.*/libs_for_gcc= -lreadline/g' Makefile
+	    check_dependency "dpkg -l libreadline-dev >/dev/null 2>&1" "Please install 'libreadline-dev'." 
+	fi
+	
         if [[ "$arg" == "--reinstall" ]]
         then
                 reinstall
@@ -192,8 +193,12 @@ then
 		
 		#Check build-essential
 		check_dependency "dpkg -l build-essential >/dev/null 2>&1" "Please install 'build-essential'."
-		#Check libreadline-dev
-		check_dependency "dpkg -l libreadline-dev >/dev/null 2>&1" "Please install 'libreadline-dev'."
+		#Check libreadline-dev if user didn't pass --disable-readline
+
+		if ! (( disable_readline ))
+		then
+		    check_dependency "dpkg -l libreadline-dev >/dev/null 2>&1" "Please install 'libreadline-dev'."
+		fi
 
 		if [[ $dependency_problem -ne 0  ]]; then exit -1; fi
 

@@ -32,6 +32,10 @@
 //Default:0
 #define LOGGING 0
 
+//Used for enabling or disabling libreadline-dev
+//Default:1
+#define ENABLED_READLINE 1
+
 //Used for storing users commands to a specific file in their home directory
 //Such as aliases
 #define RSHELL_DIR ".r-shell"

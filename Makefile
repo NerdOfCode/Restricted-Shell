@@ -1,4 +1,5 @@
 C=	gcc -std=gnu11 -O
+libs_for_gcc= -lreadline
 
 all: clean shell commands clone_bash
 
@@ -9,7 +10,7 @@ clean:
 shell:
 	rm -f Src/shell~
 
-	$C -o Src/shell Src/shell.c -lreadline
+	$C -o Src/shell Src/shell.c $(libs_for_gcc)
 
 commands:
 

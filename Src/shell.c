@@ -1,5 +1,4 @@
 /*
- 
 	 This file is part of the Restricted-Shell distribution (https://github.com/NerdOfCode/Restricted-Shell).
 	 Copyright (c) 2018 NerdOfCode.
  
@@ -28,7 +27,7 @@
 	#########################################################
 
 */
-
+#include "globals.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -38,10 +37,11 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+
+#ifndef ENABLED_READLINE 
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "globals.h"
-
+#endif
 
 //make our own version of 'bool'
 typedef int bool;
@@ -129,7 +129,7 @@ int main ( int argc, char argv[64] ){
 	start_up();
 
 	while(1){
-		if(adv_desc_access.pwd_allowed == TRUE && adv_desc_access.whoami_allowed == TRUE){
+		if(adv_desc_access.pwd_allowed == TRUE && adv_desc_access.whoami_allowed == TRUE && ENABLED_READLINE){
 			char pwd_buffer[128];
 			char *short_pwd;
 			//Just in case, run a function that changes the dir to the newly written one!
@@ -141,8 +141,9 @@ int main ( int argc, char argv[64] ){
 			short_pwd = remove_char_until(pwd_buffer, "/");
 
 			printf(YELLOW_TEXT "%s@%s[%s] " RESET, logged_in_user,hostname,short_pwd);
+			#ifndef ENABLED_READLINE
 			pinput = readline("->");
-
+			#endif
 //			add_history(pinput);
 			strncpy(input, pinput, 64);
 
@@ -151,13 +152,14 @@ int main ( int argc, char argv[64] ){
 			if(fgets(input,sizeof(input),stdin) == NULL)
 				if(DEBUG)
 					puts("Error retrieving input.");
+			strtok(input,"\n");
 		}else{
 			printf(YELLOW_TEXT "Command: " RESET);
 			if(fgets(input,sizeof(input),stdin) == NULL)
 				if(DEBUG)
 					puts("Error retrieving input.");
+			strtok(input,"\n");
 		}
-
 
 
 		//Reset testing values
