@@ -66,6 +66,11 @@ reinstall(){
 	exit 0
 }
 
+os_detection(){
+    #Detect if Ubuntu or CentOS
+    eval os_detect=$(cat /etc/os-release | awk -F "^NAME=" '{print $2}')
+}
+
 check_dependency(){
 	eval $1
 	if [[ $? -ne 0 ]]
@@ -85,34 +90,32 @@ check_updates(){
 	exit 0
 }
 
+check_commands_installed(){
+    if [[ ! $(command -v $1) ]]
+    then
+	echo "Please install '$1'..."
+	eval exit_status=1
+    fi
+    }
+
 check_commands(){
 
 	exit_status=0
 
-	if [[ ! $(command -v readlink) ]]
-	then
-		echo "Please install 'readlink'..."
-		exit_status=1
-	fi
+	#Check OS to differentiate packages
+	os_detection
 
-	if [[ ! $(command -v sed) ]]
+	if [[ "$os_detect" == "Ubuntu" ]]
 	then
-        	echo "Please install 'sed'..."
-		exit_status=1
+	    check_commands_installed "readlink" 
+	    check_commands_installed "sed"
+	    check_commands_installed "make"
+	    check_commands_installed "gcc"
+	else
+	    echo "Unsupported OS: $os_detect"
+	    exit -1
 	fi
 	
-	if [[ ! $(command -v make) ]]
-	then
-		echo "Please install 'make'..."
-		exit_status=1
-	fi
-
-	if [[ ! $(command -v gcc) ]]
-	then
-		echo "Please install 'gcc'..."
-		exit_status=1
-	fi
-
 	if [[ $exit_status -eq 1 ]]
 	then
 		exit -1
