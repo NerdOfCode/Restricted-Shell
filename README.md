@@ -5,7 +5,7 @@
 | Ubuntu 16.04 | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg"> |
 | Ubuntu 18.04 | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg"> |
 | CentOS 7.5   | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg"> |
-| Fedora 28    | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg"> |
+| Fedora 28    | <img src="https://img.shields.io/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.svg"> |
 
 A quick and simple shell in C that is designed to be fast and efficient... This shell is in early stages of development...
 

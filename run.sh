@@ -66,6 +66,11 @@ reinstall(){
 	exit 0
 }
 
+os_detection(){
+    #Detect if Ubuntu or CentOS
+    eval os_detect=$(cat /etc/os-release | awk -F "^NAME=" '{print $2}')
+}
+
 check_dependency(){
 	eval $1
 	if [[ $? -ne 0 ]]
@@ -85,34 +90,32 @@ check_updates(){
 	exit 0
 }
 
+check_commands_installed(){
+    if [[ ! $(command -v $1) ]]
+    then
+	echo "Please install '$1'..."
+	eval exit_status=1
+    fi
+    }
+
 check_commands(){
 
 	exit_status=0
 
-	if [[ ! $(command -v readlink) ]]
-	then
-		echo "Please install 'readlink'..."
-		exit_status=1
-	fi
+	#Check OS to differentiate packages
+	os_detection
 
-	if [[ ! $(command -v sed) ]]
+	if [[ "$os_detect" == "Ubuntu" || "$os_detect" == "CentOS Linux" ]]
 	then
-        	echo "Please install 'sed'..."
-		exit_status=1
+	    check_commands_installed "readlink" 
+	    check_commands_installed "sed"
+	    check_commands_installed "make"
+	    check_commands_installed "gcc"
+	else
+	    echo "Unsupported OS: $os_detect"
+	    exit -1
 	fi
 	
-	if [[ ! $(command -v make) ]]
-	then
-		echo "Please install 'make'..."
-		exit_status=1
-	fi
-
-	if [[ ! $(command -v gcc) ]]
-	then
-		echo "Please install 'gcc'..."
-		exit_status=1
-	fi
-
 	if [[ $exit_status -eq 1 ]]
 	then
 		exit -1
@@ -192,13 +195,27 @@ then
 		#Check if required dependency's are installed
 		
 		#Check build-essential
+
+	    if [[ "$os_detect" == "Ubuntu" ]]
+	    then
 		check_dependency "dpkg -l build-essential >/dev/null 2>&1" "Please install 'build-essential'."
+	    elif [[ "$os_detect" == "CentOS Linux" ]]
+	    then
+		check_dependency "rpm -q kernel-devel >/dev/null 2>&1" "Please install kernel-devel"
+	    fi
 		#Check libreadline-dev if user didn't pass --disable-readline
 
 		if ! (( disable_readline ))
 		then
-		    check_dependency "dpkg -l libreadline-dev >/dev/null 2>&1" "Please install 'libreadline-dev'."
+		    if [[ "$os_detect" == "Ubuntu" ]]
+		    then
+			check_dependency "dpkg -l libreadline-dev >/dev/null 2>&1" "Please install 'libreadline-dev'."
+		    elif [[ "$os_detect" == "CentOS Linux" ]]
+		    then
+			check_dependency "rpm -q readline-devel >/dev/null 2>&1" "Please install 'readline-devel'."  	
+		    fi
 		fi
+		
 
 		if [[ $dependency_problem -ne 0  ]]; then exit -1; fi
 
