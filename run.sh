@@ -105,7 +105,7 @@ check_commands(){
 	#Check OS to differentiate packages
 	os_detection
 
-	if [[ "$os_detect" == "Ubuntu" ]]
+	if [[ "$os_detect" == "Ubuntu" || "$os_detect" == "CentOS Linux" ]]
 	then
 	    check_commands_installed "readlink" 
 	    check_commands_installed "sed"
@@ -195,7 +195,14 @@ then
 		#Check if required dependency's are installed
 		
 		#Check build-essential
+
+	    if [[ "$os_detect" == "Ubuntu" ]]
+	    then
 		check_dependency "dpkg -l build-essential >/dev/null 2>&1" "Please install 'build-essential'."
+	    elif [[ "$os_detect" == "CentOS Linux" ]]
+	    then
+		check_dependency "rpm -q kernel-devel >/dev/null 2>&1" "Please install kernel-dev"
+	    fi
 		#Check libreadline-dev if user didn't pass --disable-readline
 
 		if ! (( disable_readline ))
