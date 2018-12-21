@@ -201,14 +201,21 @@ then
 		check_dependency "dpkg -l build-essential >/dev/null 2>&1" "Please install 'build-essential'."
 	    elif [[ "$os_detect" == "CentOS Linux" ]]
 	    then
-		check_dependency "rpm -q kernel-devel >/dev/null 2>&1" "Please install kernel-dev"
+		check_dependency "rpm -q kernel-devel >/dev/null 2>&1" "Please install kernel-devel"
 	    fi
 		#Check libreadline-dev if user didn't pass --disable-readline
 
 		if ! (( disable_readline ))
 		then
-		    check_dependency "dpkg -l libreadline-dev >/dev/null 2>&1" "Please install 'libreadline-dev'."
+		    if [[ "$os_detect" == "Ubuntu" ]]
+		    then
+			check_dependency "dpkg -l libreadline-dev >/dev/null 2>&1" "Please install 'libreadline-dev'."
+		    elif [[ "$os_detect" == "CentOS Linux" ]]
+		    then
+			check_dependency "rpm -q readline-devel >/dev/null 2>&1" "Please install 'readline-devel'."  	
+		    fi
 		fi
+		
 
 		if [[ $dependency_problem -ne 0  ]]; then exit -1; fi
 
