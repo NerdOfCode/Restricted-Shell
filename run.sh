@@ -195,7 +195,7 @@ then
 		check_dependency "dpkg -l build-essential >/dev/null 2>&1" "Please install 'build-essential'."
 		#Check libreadline-dev if user didn't pass --disable-readline
 
-		if [[ !disable_readline  ]]
+		if ! (( disable_readline ))
 		then
 		    check_dependency "dpkg -l libreadline-dev >/dev/null 2>&1" "Please install 'libreadline-dev'."
 		fi
