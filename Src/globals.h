@@ -58,7 +58,7 @@
 //Warning: If you're considering changing the below...
 //Make sure to adjust the Bin/cmd_src/nano...
 //Default Directory of Shell
-#define DEFAULT_LOCATION "/home/nerdofcode/Restricted-Shell/"
+#define DEFAULT_LOCATION "/etc/Restricted-Shell/"
 
 //Default Directory Log file for user
 #define USER_CD_LOG "CWD"
