@@ -68,7 +68,14 @@ reinstall(){
 
 os_detection(){
     #Detect if Ubuntu or CentOS
-    eval os_detect=$(cat /etc/os-release | awk -F "^NAME=" '{print $2}')
+    #eval os_detect=$(cat /etc/os-release | awk -F "^NAME=" '{print $2}')
+    case "$(cat /etc/issue | awk -F ' ' '{print $1}')" in 
+        "Ubuntu") os_detect="Ubuntu"
+	;;
+	"Kali") os_detect="Kali"
+	;;
+	"CentOS") os_detect="CentOS;"
+   esac
 }
 
 check_dependency(){
@@ -196,7 +203,7 @@ then
 		
 		#Check build-essential
 
-	    if [[ "$os_detect" == "Ubuntu" ]]
+	    if [[ "$os_detect" == "Ubuntu" ]] || [[ "$os_detect" == "Kali" ]]
 	    then
 		check_dependency "dpkg -l build-essential >/dev/null 2>&1" "Please install 'build-essential'."
 	    elif [[ "$os_detect" == "CentOS Linux" ]]
@@ -207,7 +214,7 @@ then
 
 		if ! (( disable_readline ))
 		then
-		    if [[ "$os_detect" == "Ubuntu" ]]
+		    if [[ "$os_detect" == "Ubuntu" ]] || [[ "$os_detect" == "Kali"  ]]
 		    then
 			check_dependency "dpkg -l libreadline-dev >/dev/null 2>&1" "Please install 'libreadline-dev'."
 		    elif [[ "$os_detect" == "CentOS Linux" ]]
