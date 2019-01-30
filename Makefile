@@ -1,4 +1,4 @@
-C=	gcc -std=gnu11 -O
+C=	gcc -g -std=gnu11 -O
 libs_for_gcc= -lreadline
 
 all: clean shell commands clone_bash

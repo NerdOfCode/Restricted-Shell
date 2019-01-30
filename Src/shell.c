@@ -18,7 +18,7 @@
   #######################################################################################
   Author: NerdOfCode
   License: GPL-2.0
-  Updated on: 11/1/18
+  Updated on: 1/30/19
   #######################################################################################
 
   #########################################################
@@ -144,16 +144,18 @@ int main ( int argc, char argv[64] ){
 #ifndef ENABLED_READLINE
       pinput = readline("->");
 #else
-      if(fgets(pinput,sizeof(input),stdin) == NULL){
+      if(fgets(input,sizeof(input),stdin) == NULL){
 	if(DEBUG){
 	  puts("Error retrieving input.");
-	  puts("try ./run --disable-readline");
-	    
-	    }
+	  puts("\ttry ./run --disable-readline");
+      	}
       }
+      strtok(input,"\n");
 #endif
+      if(DEBUG)
+	printf("Received: |%s|\n",input);
       //add_history(pinput);
-      strncpy(input, pinput, 64);
+      strncpy(input, pinput,sizeof(input));
 
     }else if(adv_desc_access.whoami_allowed == TRUE){
       printf(YELLOW_TEXT "%s@%s: " RESET, logged_in_user,hostname);
@@ -181,6 +183,7 @@ int main ( int argc, char argv[64] ){
 
     //Check to see if user wants to exit before re-running loop
     //Have to check for newline too, because of fgets for input
+    
     if(strncmp(input,"exit",sizeof("exit")) == 0){
       clean_up();
       exit(1);
@@ -260,8 +263,8 @@ int start_up( void ){
 }
 
 int clean_up( void ){
-
-  printf("Cleaning up...\n");
+  if(DEBUG)
+    printf("Cleaning up...\n");
   //Reset color values
   puts(RESET);
   //TODO
