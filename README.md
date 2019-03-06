@@ -1,5 +1,7 @@
 # Restricted-Shell
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0889612457db4cad8696f21db3b970bc)](https://app.codacy.com/app/NerdOfCode/Restricted-Shell?utm_source=github.com&utm_medium=referral&utm_content=NerdOfCode/Restricted-Shell&utm_campaign=Badge_Grade_Dashboard)
+
 | OS | Status |
 |----|--------|
 | Ubuntu 16.04 | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg">               |
