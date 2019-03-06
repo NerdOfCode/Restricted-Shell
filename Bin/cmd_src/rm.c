@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -23,16 +24,13 @@ int main(int argc, char **argv){
 
 	//Path exists
 	if(path){
-
 		if(strstr(buffer,DEFAULT_LOCATION) != NULL){
 
 			puts(RED_TEXT"Access Denied: 1004"RESET);
 			exit(EXIT_FAILURE);
 
 		}else{
-
 			remove_status = remove(buffer);
-
 		}
 
 	} else {

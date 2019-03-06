@@ -7,7 +7,7 @@
 DEFAULT_LOCATION="/etc/Restricted-Shell/"
 
 #Define last-updated date
-LAST_UPDATED="10/28/18"
+LAST_UPDATED="3/6/19"
 
 #Check if any updates via git everytime "run.sh" is ran
 #Default: Off
@@ -17,3 +17,10 @@ updates=0
 RED_TEXT='\033[0;31m'
 RESET='\033[0m'
 
+pushd() {
+    command pushd "$@" > /dev/null
+}
+
+popd(){
+    command popd "$@" > /dev/null
+}

@@ -9,7 +9,7 @@
 int main(int argc, char *argv[]){
 
 	int ret = 0;
-	char buffer[64];
+	char buffer[128];
 	char dir[128] = "";
 
 	if(argc < 2){
@@ -18,16 +18,16 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
-        if(getcwd(buffer,64)==NULL){
+        if(getcwd(buffer,sizeof(buffer))==NULL)
 		puts(RED_TEXT"Could not get directory!"RESET);
-	}
+	
 
-	strcat(dir,buffer);
+	strncat(dir,buffer,sizeof(dir));
 
-	strcat(dir, "/");
+	strncat(dir, "/",sizeof(dir));
 
-	strcat(dir, argv[1]);
-
+	strncat(dir, argv[1], sizeof(dir));
+	
 	ret = mkdir(dir, 0755);
 
 	if(ret != 0){

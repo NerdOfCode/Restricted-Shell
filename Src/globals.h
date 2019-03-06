@@ -17,20 +17,13 @@
          along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-//Value Conventions:
-//	On --> 1
-//	Off --> 0
-
-#define TRUE 1
-#define FALSE 0
-
 //Used for displaying debug info for specific functions and commands (Experimental)
 //Default:0
 #define DEBUG 0
 
 //Used for User-command logging
 //Default:0
-#define LOGGING 0
+#define LOGGING 1
 
 //Used for enabling or disabling libreadline-dev
 //Default:1

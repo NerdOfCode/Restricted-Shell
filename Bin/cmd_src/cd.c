@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <unistd.h>
 #include <string.h>
+#include <libgen.h>
 #include "../../Src/globals.h"
+#include "../../Src/lib.h"
 
 //If directory change success, return 0 and write to file
 int write_change();
@@ -23,11 +26,11 @@ int main(int argc, char *argv[]){
 	}
 
 	//If successfully changes dir
-	if(result == 0){
+	if(!result)
 		write_change(copy);
-	}else{
+	else
 		puts("Directory not found!");
-	}
+	
 
 
 	return 0;
@@ -48,35 +51,23 @@ int write_change(char *copy){
 
 	strcat(cwd_file, USER_CD_LOG);
 
-	if(fopen(cwd_file,"w")==NULL){
-		puts(RED_TEXT"Could not get cached directory!"RESET);
-	}
-
+	if( fopen(cwd_file,"w") == NULL )
+		puts(RED_TEXT"Could not reliably determine directory!"RESET);
+	
 	fptr = fopen(cwd_file, "w");
 
 	//Protect against errors
-	if(fptr == NULL){
+	if( fptr == NULL ){
 		puts(RED_TEXT"File Access Error[FAE]...");
 		puts("Error 1001..."RESET);
 		return -1;
 	}
-
-
-	//Audit the directory change before finalizing
-	audit_dir(copy);
+	
+	//char *rel = basename(copy);
 
 	//Print the new dir to our file
 	fprintf(fptr,"%s",copy);
 	fclose(fptr);
 
 	return 0;
-}
-
-// *dir => Relative Directory Name
-void audit_dir(char *dir){
-	if(strstr(DEFAULT_LOCATION,dir) != NULL){
-		puts(RED_TEXT"Access Denied: 1004"RESET);
-		exit(-1);
-	}
-
 }

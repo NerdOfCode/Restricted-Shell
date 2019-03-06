@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 : '
          This file is part of the Restricted-Shell distribution (https://github.com/NerdOfCode/Restricted-Shell).
          Copyright (c) 2019 NerdOfCode.
@@ -85,7 +85,7 @@ check_dependency(){
 		#Tell the whole script that we have a dependency problem
 		dependency_exit=1
 		echo "$2"
-		exit -1
+		exit 2
 	fi
 
 }
@@ -120,12 +120,12 @@ check_commands(){
 	    check_commands_installed "gcc"
 	else
 	    echo "Unsupported OS: $os_detect"
-	    exit -1
+	    exit 2
 	fi
 	
 	if [[ $exit_status -eq 1 ]]
 	then
-		exit -1
+		exit 2
 	fi
 
 }
@@ -224,7 +224,7 @@ then
 		fi
 		
 
-		if [[ $dependency_problem -ne 0  ]]; then exit -1; fi
+		if [[ $dependency_problem -ne 0  ]]; then exit 2; fi
 
 		read -p "Enter Default Directory for Shell(Default: '${DEFAULT_LOCATION}): " location
 		if [[ -z $location ]]
@@ -332,15 +332,11 @@ then
 	make
 fi
 
-cd Src/
+# Make sure the global hostname is accessible by the shell
+export HOSTNAME
 
-#clear
-
-#if [ ! -f Src/shell ]
-#then
-#	echo "An error occurred in compiling shell.c ... Please scroll up for errors"
-#	exit -1
-#fi
+pushd Src/
 
 ./shell
 
+popd

@@ -34,7 +34,7 @@ root_check(){
     then
         echo -e "${red_text}Error:${reset_text} unprivileged user"
         echo -e "\t${yellow_text}Note:${reset_text} Pass '--no-root' to bypass this"
-        exit -1
+        exit 2
     fi
 }
 
@@ -63,7 +63,7 @@ create_config_backup(){
 	    mkdir -p ~/$absolute_config_backup_location
 	else
 	    echo -e "${red_text}Error:${reset_text} Creating directory @ [~/${clone_location}]"
-	    exit -1
+	    exit 2
 	fi 
     fi
     echo -e "${green_text}Success:${reset_text} Created backup @ [~/${absolute_config_backup_location}]"

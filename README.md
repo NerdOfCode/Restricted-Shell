@@ -2,14 +2,14 @@
 
 | OS | Status |
 |----|--------|
-| Ubuntu 16.04 | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg"> |
-| Ubuntu 18.04 | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg"> |
-| CentOS 7.5   | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg"> |
+| Ubuntu 16.04 | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg">               |
+| Ubuntu 18.04 | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg">               |
+| CentOS 7.5   | <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg">               |
 | Fedora 28    | <img src="https://img.shields.io/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.svg"> |
 
 A quick and simple shell in C that is designed to be fast and efficient... This shell is in early stages of development...
 
-# Documentation
+## Documentation
 To easily setup this amazing restricted shell... Follow the instructions found below:
 
 ## Single User Mode
@@ -27,7 +27,7 @@ cd Restricted-Shell/ && bash run.sh
 ```
 And then just answer the questions to the automatic configuration!
 
-## Multi-User Mode
+### Multi-User Mode
 
 There is no such mode as of now.
 
@@ -47,7 +47,7 @@ After performing the above, make sure to first run `run.sh` to customize your sh
 
 Enjoy!!! Oh, and also if anyone is to come across any errors or suggestions, please feel free to send an email to team@nerdofcode.com!
 
-# Notes
+## Notes
 
 When installing this Restricted-Shell, make sure to be mindful of the permissions you place on this shell's files/directories...
 
@@ -55,7 +55,7 @@ As of right now, I recommend creating and using separate installations for each 
 
 Good luck :)!
 
-# W.I.P.
+## W.I.P
 
-1. First, and foremost... We will need to add real time keyboard input in order to allow users to review previous commands...
-2. Secondly, we need to add an enhanced multi-user mode!
+1.  First, and foremost... We will need to add real time keyboard input in order to allow users to review previous commands...
+2.  Secondly, we need to add an enhanced multi-user mode!

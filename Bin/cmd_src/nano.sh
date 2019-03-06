@@ -6,12 +6,14 @@ source "${location}Src/global_bash_var"
 
 #Check if system has dependencies
 
-readlink_status=$(which readlink)
+which readlink 2&>1
 
-if [[ $? != 0 ]]
+readlink_status=$?
+
+if [[ $readlink_status != 0 ]]
 then
-	echo -e "${RED_TEXT}Error: 2001${RESET}"
-	exit -1
+    echo -e "${RED_TEXT}Error: 2001${RESET}"
+    exit -1
 fi
 
 #Check how many args
